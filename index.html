@@ -1,1278 +1,1144 @@
-
-
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Oral Ally – Clickable Prototype</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nikhil Viswan — Frontend Developer & Designer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://api.fontshare.com/v2/css?f[]=aeonik@300,400,500,700&display=swap" rel="stylesheet" />
 <style>
-  :root {
-    --mint:      #2EC4A5;
-    --mint-dark: #1e9e84;
-    --mint-lite: #e6faf6;
-    --amber:     #F5A623;
-    --amber-lite:#fff8ec;
-    --red:       #E74C3C;
-    --red-lite:  #fdecea;
-    --blue:      #3B82F6;
-    --blue-lite: #eff6ff;
-    --navy:      #0f2d3d;
-    --slate:     #4a6278;
-    --bg:        #f0f7f5;
-    --card:      #ffffff;
-    --border:    #ddeee9;
-    --text:      #1a3040;
-    --sub:       #6b8fa0;
-    --radius:    18px;
-    --shadow:    0 4px 24px rgba(0,0,0,.08);
-  }
-  *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-  body {
-    font-family: 'Nunito', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24px 12px 60px;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
 
-  /* ── PROTOTYPE FRAME ── */
-  .device-frame {
-    width: 390px;
-    min-height: 844px;
-    background: var(--card);
-    border-radius: 44px;
-    box-shadow: 0 20px 60px rgba(0,0,0,.18), 0 0 0 8px #1a1a1a;
-    overflow: hidden;
-    position: relative;
-  }
-  .notch {
-    width: 130px; height: 30px;
-    background: #1a1a1a;
-    border-radius: 0 0 20px 20px;
-    margin: 0 auto;
-    position: relative; z-index: 10;
-  }
+/* ── THEME VARIABLES ── */
+:root {
+  --bg: #fff;
+  --bg-alt: #f5f4f0;
+  --fg: #0a0a0a;
+  --fg-muted: #666;
+  --fg-faint: #bbb;
+  --border: rgba(0,0,0,0.09);
+  --border-mid: rgba(0,0,0,0.14);
+  --card-bg: #fff;
+  --tag-bg: rgba(0,0,0,0.05);
+  --stat-bg: #f9f9f8;
+  --header-bg: rgba(255,255,255,0.88);
+  --badge-bg: #f5f4f0;
+  --input-bg: #f9f9f8;
+  --input-border: rgba(0,0,0,0.12);
+  --skill-bg: #0a0a0a;
+  --skill-text: #fff;
+  --skill-tag-border: rgba(255,255,255,0.15);
+  --skill-tag-color: rgba(255,255,255,0.85);
+  --theme-icon: "☀️";
+}
 
-  /* ── SCREENS ── */
-  .screen {
-    display: none;
-    flex-direction: column;
-    min-height: 812px;
-    padding-bottom: 90px;
-    animation: fadeIn .25s ease;
-  }
-  .screen.active { display: flex; }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+[data-theme="dark"] {
+  --bg: #0a0a0a;
+  --bg-alt: #111;
+  --fg: #f0f0f0;
+  --fg-muted: #999;
+  --fg-faint: #555;
+  --border: rgba(255,255,255,0.08);
+  --border-mid: rgba(255,255,255,0.14);
+  --card-bg: #141414;
+  --tag-bg: rgba(255,255,255,0.07);
+  --stat-bg: #181818;
+  --header-bg: rgba(10,10,10,0.9);
+  --badge-bg: #1e1e1e;
+  --input-bg: #181818;
+  --input-border: rgba(255,255,255,0.1);
+  --skill-bg: #f0f0f0;
+  --skill-text: #0a0a0a;
+  --skill-tag-border: rgba(0,0,0,0.25);
+  --skill-tag-color: rgba(0,0,0,0.8);
+}
 
-  /* ── STATUS BAR ── */
-  .status-bar {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 8px 20px 0;
-    font-size: 11px; font-weight: 700; color: var(--slate);
-  }
+body {
+  font-family: 'Aeonik', sans-serif;
+  font-weight: 300;
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  cursor: none;
+  transition: background 0.4s ease, color 0.4s ease;
+}
 
-  /* ── HEADER ── */
-  .app-header {
-    display: flex; align-items: center; gap: 10px;
-    padding: 14px 20px 10px;
-  }
-  .app-header .logo-icon {
-    width: 38px; height: 38px;
-    background: var(--mint);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-  }
-  .app-header .brand { font-size: 20px; font-weight: 900; color: var(--navy); }
-  .app-header .brand span { color: var(--mint); }
-  .app-header .back-btn {
-    width: 34px; height: 34px;
-    border: none; background: var(--bg);
-    border-radius: 10px; cursor: pointer;
-    font-size: 17px; display: flex; align-items: center; justify-content: center;
-    color: var(--navy);
-  }
-  .app-header .hdr-title {
-    flex: 1; font-size: 17px; font-weight: 800; color: var(--navy); text-align: center;
-  }
-  .app-header .hdr-action {
-    font-size: 13px; font-weight: 700; color: var(--mint); cursor: pointer; border: none; background: none;
-  }
+/* ── Custom cursor ── */
+#cursor-dot {
+  position: fixed;
+  width: 10px; height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  transition: width 0.25s ease, height 0.25s ease;
+  mix-blend-mode: difference;
+}
+#cursor-ring {
+  position: fixed;
+  width: 38px; height: 38px;
+  border: 1.5px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  transform: translate(-50%, -50%);
+  transition: width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+  mix-blend-mode: difference;
+}
+.cursor-trail-dot {
+  position: fixed;
+  width: 6px; height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99990;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  mix-blend-mode: difference;
+}
+body.cursor-hover #cursor-dot { width: 18px; height: 18px; }
+body.cursor-hover #cursor-ring { width: 60px; height: 60px; }
+body.cursor-click #cursor-dot { width: 6px; height: 6px; }
+body.cursor-click #cursor-ring { width: 22px; height: 22px; }
 
-  /* ── BOTTOM NAV ── */
-  .bottom-nav {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    height: 80px;
-    background: #fff;
-    border-top: 1px solid var(--border);
-    display: flex;
-    padding: 0 10px 10px;
-    z-index: 20;
-  }
-  .nav-item {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 3px;
-    cursor: pointer; border: none; background: none;
-    color: var(--sub); font-size: 9px; font-weight: 700;
-    border-radius: 14px; transition: all .2s;
-    font-family: 'Nunito', sans-serif;
-  }
-  .nav-item span.icon { font-size: 22px; }
-  .nav-item.active { color: var(--mint); }
-  .nav-item.active span.icon { filter: drop-shadow(0 0 4px rgba(46,196,165,.4)); }
+/* ── Preloader ── */
+#preloader {
+  position: fixed; inset: 0; background: #000; z-index: 9999;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: opacity 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+#preloader::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0;
+  height: 2px; width: 0%;
+  background: #fff;
+  animation: preloader-bar 4.5s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+@keyframes preloader-bar { 0%{width:0%} 80%{width:95%} 100%{width:100%} }
+#hello {
+  font-family: 'Aeonik', sans-serif; font-weight: 300;
+  font-size: clamp(1.4rem, 3vw, 0.5rem);
+  color: #fff; opacity: 0; transform: translateY(12px);
+  transition: opacity 0.35s cubic-bezier(0.4,0,0.2,1), transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  letter-spacing: 0.04em;
+}
 
-  /* ── SCROLL AREA ── */
-  .scroll-area { flex: 1; overflow-y: auto; padding: 0 16px 16px; }
-  .scroll-area::-webkit-scrollbar { display: none; }
+/* ── Theme toggle button ── */
+#theme-btn {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--border-mid);
+  background: var(--bg);
+  color: var(--fg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; cursor: none;
+  transition: background 0.3s ease, border-color 0.3s ease, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
+}
+#theme-btn:hover { transform: scale(1.12) rotate(20deg); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
 
-  /* ── CARDS ── */
-  .card {
-    background: var(--card);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    padding: 18px;
-    margin-bottom: 14px;
-  }
-  .card.mint   { background: var(--mint-lite); border: 1.5px solid var(--mint); }
-  .card.amber  { background: var(--amber-lite); border: 1.5px solid var(--amber); }
-  .card.red    { background: var(--red-lite);   border: 1.5px solid var(--red); }
-  .card.blue   { background: var(--blue-lite);  border: 1.5px solid var(--blue); }
+/* ── Scroll reveal ── */
+.reveal { opacity:0; transform:translateY(40px); transition:opacity 0.85s cubic-bezier(0.4,0,0.2,1), transform 0.85s cubic-bezier(0.4,0,0.2,1); will-change:opacity,transform; }
+.reveal.in { opacity:1; transform:translateY(0); }
+.reveal-l { opacity:0; transform:translateX(-32px); transition:opacity 0.85s cubic-bezier(0.4,0,0.2,1), transform 0.85s cubic-bezier(0.4,0,0.2,1); will-change:opacity,transform; }
+.reveal-l.in { opacity:1; transform:translateX(0); }
+.reveal-scale { opacity:0; transform:scale(0.88) translateY(30px); transition:opacity 0.7s cubic-bezier(0.34,1.56,0.64,1), transform 0.7s cubic-bezier(0.34,1.56,0.64,1); will-change:opacity,transform; }
+.reveal-scale.in { opacity:1; transform:scale(1) translateY(0); }
 
-  /* ── BUTTONS ── */
-  .btn {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 14px 20px;
-    border-radius: 14px;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 800; font-size: 15px;
-    cursor: pointer; border: none;
-    width: 100%; transition: transform .15s, box-shadow .15s;
-  }
-  .btn:active { transform: scale(.97); }
-  .btn.primary { background: var(--mint); color: #fff; box-shadow: 0 4px 16px rgba(46,196,165,.35); }
-  .btn.secondary { background: var(--bg); color: var(--navy); border: 1.5px solid var(--border); }
-  .btn.red    { background: var(--red);  color: #fff; }
-  .btn.amber  { background: var(--amber); color: #fff; }
-  .btn.blue   { background: var(--blue); color: #fff; }
-  .btn.sm     { padding: 10px 16px; font-size: 13px; border-radius: 10px; }
+/* ── Utilities ── */
+.sec-label { font-size:0.65rem; letter-spacing:0.18em; text-transform:uppercase; color: var(--fg-faint); }
+.divider { border:none; border-top:1px solid var(--border); }
 
-  /* ── FORM ELEMENTS ── */
-  .form-group { margin-bottom: 14px; }
-  .form-label { font-size: 12px; font-weight: 800; color: var(--sub); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; display: block; }
-  .form-input {
-    width: 100%; padding: 12px 14px;
-    border: 1.5px solid var(--border); border-radius: 12px;
-    font-family: 'Nunito', sans-serif; font-size: 14px; color: var(--text);
-    background: var(--bg); outline: none;
-    transition: border-color .2s;
-  }
-  .form-input:focus { border-color: var(--mint); }
+/* ── Marquee ── */
+.marquee-wrap { overflow:hidden; border-color: var(--border); }
+.marquee-track { display:flex; white-space:nowrap; animation:marquee 22s linear infinite; }
+@keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
-  /* ── SCORE BUTTONS ── */
-  .score-row { display: flex; gap: 8px; margin-top: 8px; }
-  .score-btn {
-    flex: 1; padding: 12px 6px;
-    border-radius: 12px; border: 2px solid transparent;
-    font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px;
-    cursor: pointer; text-align: center; transition: all .2s;
-  }
-  .score-btn.s0 { background: #e6faf6; color: #1e9e84; border-color: #b3ead9; }
-  .score-btn.s1 { background: #fff8ec; color: #b77a10; border-color: #f5d9a0; }
-  .score-btn.s2 { background: #fdecea; color: var(--red); border-color: #f5b3ae; }
-  .score-btn.selected.s0 { background: var(--mint); color: #fff; border-color: var(--mint); }
-  .score-btn.selected.s1 { background: var(--amber); color: #fff; border-color: var(--amber); }
-  .score-btn.selected.s2 { background: var(--red); color: #fff; border-color: var(--red); }
+/* ── Skill tags dark section ── */
+.stag-dark {
+  border:1px solid var(--skill-tag-border); border-radius:999px;
+  padding:0.5rem 1.25rem; font-size:0.8rem; color: var(--skill-tag-color);
+  transition:background 0.28s, color 0.28s, border-color 0.28s, transform 0.22s ease;
+  cursor:none; display:inline-block;
+}
 
-  /* ── BADGE ── */
-  .badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 4px 10px; border-radius: 20px;
-    font-size: 11px; font-weight: 800;
-  }
-  .badge.green  { background: var(--mint-lite); color: var(--mint-dark); }
-  .badge.amber  { background: var(--amber-lite); color: #b77a10; }
-  .badge.red    { background: var(--red-lite); color: var(--red); }
-  .badge.blue   { background: var(--blue-lite); color: var(--blue); }
-  .badge.water  { background: #e0f2fe; color: #0369a1; }
+/* ── Skill tags light ── */
+.stag {
+  border:1px solid var(--border-mid); border-radius:999px;
+  padding:0.5rem 1.25rem; font-size:0.8rem; letter-spacing:0.02em;
+  color: var(--fg-muted);
+  transition:background 0.28s, color 0.28s, border-color 0.28s, transform 0.22s ease;
+  cursor:none; display:inline-block;
+}
+.stag:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
 
-  /* ── TOGGLE ── */
-  .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 14px; background: var(--bg); border-radius: 14px; margin-bottom: 12px; }
-  .toggle-label { font-size: 13px; font-weight: 700; color: var(--text); }
-  .toggle { position: relative; width: 48px; height: 26px; }
-  .toggle input { opacity: 0; width: 0; height: 0; }
-  .slider {
-    position: absolute; inset: 0; background: #ccc; border-radius: 26px; cursor: pointer; transition: .3s;
-  }
-  .slider::before {
-    content: ''; position: absolute; width: 20px; height: 20px;
-    left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .3s;
-  }
-  input:checked + .slider { background: var(--mint); }
-  input:checked + .slider::before { transform: translateX(22px); }
+@keyframes tag-wobble {
+  0%{transform:scale(1) rotate(0deg)}
+  20%{transform:scale(1.08) rotate(-3deg)}
+  40%{transform:scale(1.06) rotate(2.5deg)}
+  60%{transform:scale(1.04) rotate(-2deg)}
+  80%{transform:scale(1.02) rotate(1deg)}
+  100%{transform:scale(1.05) rotate(0deg)}
+}
+.stag:hover { animation:tag-wobble 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.stag-dark:hover { animation:tag-wobble 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 
-  /* ── PROGRESS BAR ── */
-  .progress-bar { height: 6px; background: var(--border); border-radius: 10px; overflow: hidden; margin: 8px 0; }
-  .progress-fill { height: 100%; border-radius: 10px; transition: width .4s; }
+/* ── Project card ── */
+.pcard {
+  border:1px solid var(--border); border-radius:1.5rem; overflow:hidden;
+  background: var(--card-bg);
+  transition:transform 0.45s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.45s, border-color 0.45s ease;
+  position:relative; will-change:transform;
+}
+.pcard:hover { transform:translateY(-10px) scale(1.012) rotate(-0.3deg); box-shadow:0 28px 70px rgba(0,0,0,0.18); border-color: var(--border-mid); }
+.pcard-overlay {
+  position:absolute; inset:0; background:rgba(10,10,10,0.92); border-radius:1.5rem;
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; transition:opacity 0.38s;
+}
+.pcard:hover .pcard-overlay { opacity:1; }
 
-  /* ── RESIDENT ROW ── */
-  .resident-row {
-    display: flex; align-items: center; gap: 12px;
-    padding: 14px; background: var(--card);
-    border-radius: var(--radius); margin-bottom: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,.05);
-    cursor: pointer; transition: transform .15s;
-    border: 1.5px solid var(--border);
-  }
-  .resident-row:active { transform: scale(.98); }
-  .avatar {
-    width: 44px; height: 44px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; flex-shrink: 0;
-  }
-  .avatar.green  { background: var(--mint-lite); }
-  .avatar.amber  { background: var(--amber-lite); }
-  .avatar.red    { background: var(--red-lite); }
-  .res-info { flex: 1; }
-  .res-name  { font-size: 15px; font-weight: 800; color: var(--navy); }
-  .res-meta  { font-size: 11px; color: var(--sub); margin-top: 2px; }
-  .res-score { font-size: 20px; font-weight: 900; }
-  .res-score.green { color: var(--mint); }
-  .res-score.amber { color: var(--amber); }
-  .res-score.red   { color: var(--red); }
+/* ── Buttons ── */
+.btn-dark {
+  background: var(--fg); color: var(--bg); border:1px solid var(--fg); border-radius:999px;
+  padding:1rem 2rem; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none;
+  display:inline-block;
+  transition:background 0.3s, color 0.3s, transform 0.25s ease, box-shadow 0.3s;
+  font-family:'Aeonik',sans-serif; cursor:none;
+}
+.btn-dark:hover { background:transparent; color: var(--fg); transform:scale(1.05); box-shadow:0 4px 20px rgba(0,0,0,0.15); }
 
-  /* ── SECTION TITLES ── */
-  .section-title { font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; color: var(--sub); margin: 16px 0 8px; }
+/* ── CV button ── */
+.btn-cv {
+  background: transparent; color: var(--fg); border:1px solid var(--border-mid); border-radius:999px;
+  padding:0.85rem 1.8rem; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none;
+  display:inline-flex; align-items:center; gap:6px;
+  transition:background 0.3s, color 0.3s, border-color 0.3s, transform 0.25s ease, box-shadow 0.3s;
+  font-family:'Aeonik',sans-serif; cursor:none;
+}
+.btn-cv:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); transform:scale(1.05); box-shadow:0 4px 20px rgba(0,0,0,0.15); }
 
-  /* ── ASSESSMENT ITEM ── */
-  .assess-item { margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
-  .assess-item:last-child { border-bottom: none; }
-  .assess-name { font-size: 15px; font-weight: 800; color: var(--navy); display: flex; align-items: center; gap: 6px; }
-  .assess-desc { font-size: 12px; color: var(--sub); margin: 4px 0 8px; }
+/* ── Underline link ── */
+.ulink { position:relative; text-decoration:none; color: var(--fg); cursor:none; }
+.ulink::after { content:''; position:absolute; bottom:-2px; left:0; width:0; height:1px; background: var(--fg); transition:width 0.32s; }
+.ulink:hover::after { width:100%; }
 
-  /* ── PHOTO CARD ── */
-  .photo-placeholder {
-    background: var(--bg); border: 2px dashed var(--border);
-    border-radius: 14px; height: 100px;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 6px; cursor: pointer; color: var(--sub); font-size: 12px; font-weight: 700;
-  }
-  .photo-placeholder span { font-size: 28px; }
+/* ── Menu overlay ── */
+#menu-overlay {
+  position:fixed; inset:0; background:#0a0a0a; z-index:8000;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none;
+  transition:opacity 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+#menu-overlay.open { opacity:1; pointer-events:all; }
+#menu-overlay a {
+  font-family:'Aeonik',sans-serif; font-weight:200;
+  font-size:clamp(2rem, 6.5vw, 5rem); color:rgba(255,255,255,0.7); text-decoration:none; line-height:1.2;
+  opacity:0; transform:translateY(28px);
+  transition:opacity 0.42s cubic-bezier(0.4,0,0.2,1), transform 0.42s, color 0.2s ease;
+  cursor:none; display:flex; align-items:baseline; gap:0.75rem;
+}
+#menu-overlay a .menu-num { font-size:0.6rem; letter-spacing:0.18em; color:rgba(255,255,255,0.25); font-weight:300; align-self:center; min-width:1.5rem; }
+#menu-overlay.open a { opacity:1; transform:translateY(0); }
+#menu-overlay a:hover { color:#fff; }
+#menu-overlay a:hover .menu-num { color:rgba(255,255,255,0.5); }
+#menu-overlay a:nth-child(1){transition-delay:.06s}
+#menu-overlay a:nth-child(2){transition-delay:.12s}
+#menu-overlay a:nth-child(3){transition-delay:.18s}
+#menu-overlay a:nth-child(4){transition-delay:.24s}
+#menu-overlay a:nth-child(5){transition-delay:.30s}
+#menu-overlay a:nth-child(6){transition-delay:.36s}
 
-  /* ── SUMMARY SCORE ── */
-  .score-summary-circle {
-    width: 100px; height: 100px; border-radius: 50%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    margin: 0 auto 16px;
-  }
-  .score-summary-circle .big-num { font-size: 36px; font-weight: 900; }
-  .score-summary-circle .lbl     { font-size: 11px; font-weight: 700; opacity: .8; }
+#close-btn {
+  position:fixed; top:1.8rem; right:1.8rem; z-index:8100;
+  background:#fff; color:#0a0a0a; border:none; border-radius:999px;
+  padding:0.85rem 1.8rem; font-family:'Aeonik',sans-serif; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase;
+  font-weight:500; cursor:none; display:flex; align-items:center; gap:8px;
+  opacity:0; pointer-events:none; transform:translateY(-8px) scale(0.95);
+  transition:opacity 0.4s, transform 0.4s, background 0.25s, box-shadow 0.25s;
+  box-shadow:0 2px 20px rgba(0,0,0,0.4);
+}
+#close-btn.visible { opacity:1; pointer-events:all; transform:translateY(0) scale(1); }
+#close-btn:hover { background:#f5f5f5; transform:scale(1.04); }
+#close-btn .x-icon { width:16px; height:16px; position:relative; display:inline-block; }
+#close-btn .x-icon::before, #close-btn .x-icon::after {
+  content:''; position:absolute; top:50%; left:50%;
+  width:14px; height:1.5px; background:#0a0a0a; border-radius:2px; transform-origin:center;
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+#close-btn .x-icon::before { transform:translate(-50%,-50%) rotate(45deg); }
+#close-btn .x-icon::after  { transform:translate(-50%,-50%) rotate(-45deg); }
 
-  /* ── MODAL OVERLAY ── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,.5); z-index: 100;
-    align-items: flex-end; justify-content: center;
-  }
-  .modal-overlay.open { display: flex; animation: slideUp .25s ease; }
-  @keyframes slideUp { from { transform: translateY(40px); opacity:0; } to { transform: none; opacity:1; } }
-  .modal-sheet {
-    width: 390px; max-width: 100%;
-    background: #fff; border-radius: 24px 24px 0 0;
-    padding: 24px 20px 40px;
-  }
-  .modal-handle { width: 40px; height: 4px; background: var(--border); border-radius: 4px; margin: 0 auto 20px; }
-  .modal-title { font-size: 18px; font-weight: 900; color: var(--navy); margin-bottom: 6px; }
-  .modal-sub   { font-size: 13px; color: var(--sub); margin-bottom: 20px; }
+/* ── Stat numbers ── */
+.stat-num { font-size:clamp(2.2rem, 5vw, 3.5rem); font-weight:300; line-height:1; letter-spacing:-0.02em; }
+@keyframes stat-pop { 0%{transform:scale(1)} 40%{transform:scale(1.18)} 60%{transform:scale(0.95)} 80%{transform:scale(1.06)} 100%{transform:scale(1)} }
+.stat-num.popped { animation:stat-pop 0.6s cubic-bezier(0.34,1.56,0.64,1); }
 
-  /* ── MISC ── */
-  .divider { height: 1px; background: var(--border); margin: 14px 0; }
-  .chip-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .chip { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; background: var(--bg); color: var(--slate); border: 1.5px solid var(--border); }
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--sub); }
-  .empty-state .icon { font-size: 48px; }
-  .help-row { display: flex; align-items: flex-start; gap: 10px; padding: 12px; background: var(--bg); border-radius: 12px; margin-bottom: 10px; }
-  .help-row .hi { font-size: 22px; flex-shrink: 0; }
-  .help-row .ht { font-size: 13px; font-weight: 700; color: var(--navy); }
-  .help-row .hd { font-size: 11px; color: var(--sub); margin-top: 2px; }
+/* ── Contact big text ── */
+.contact-big { font-size:clamp(2.6rem, 7.5vw, 8rem); font-weight:300; line-height:0.95; letter-spacing:-0.03em; }
 
-  /* ── PROTOTYPE LABEL ── */
-  .proto-label {
-    background: #1a1a1a; color: #fff; padding: 8px 20px;
-    text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .08em;
-    text-transform: uppercase;
-  }
-  .proto-bar {
-    background: var(--navy); color: #fff;
-    padding: 12px 20px;
-    font-size: 11px; font-weight: 700; text-align: center;
-    letter-spacing: .04em;
-  }
-  .proto-bar span { color: var(--mint); }
+/* ── Header ── */
+header {
+  transition:box-shadow 0.4s ease, background 0.4s ease, padding 0.4s ease;
+  position:sticky; top:0; z-index:100;
+  background: var(--header-bg);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+header.scrolled { box-shadow:0 1px 0 var(--border), 0 4px 20px rgba(0,0,0,0.04); padding-top:1rem !important; padding-bottom:1rem !important; }
 
-  /* ── LOGIN SCREEN ── */
-  .login-hero {
-    padding: 32px 20px 20px;
-    display: flex; flex-direction: column; align-items: center; text-align: center;
-  }
-  .login-logo {
-    width: 80px; height: 80px; background: var(--mint);
-    border-radius: 24px; display: flex; align-items: center; justify-content: center;
-    font-size: 40px; margin-bottom: 16px;
-    box-shadow: 0 8px 24px rgba(46,196,165,.4);
-  }
-  .login-title { font-family: 'DM Serif Display', serif; font-size: 30px; color: var(--navy); line-height: 1.1; }
-  .login-title em { font-style: italic; color: var(--mint); }
-  .login-sub { font-size: 13px; color: var(--sub); margin-top: 6px; }
+/* ── Menu btn ── */
+#menu-btn {
+  background: var(--fg); color: var(--bg); border:1px solid var(--fg); border-radius:999px;
+  padding:0.85rem 1.8rem; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase;
+  font-family:'Aeonik',sans-serif; font-weight:500; cursor:none;
+  display:flex; align-items:center; gap:8px;
+  transition:transform 0.25s cubic-bezier(0.34,1.56,0.64,1), background 0.3s, color 0.3s, box-shadow 0.25s;
+}
+#menu-btn:hover { transform:scale(1.05); box-shadow:0 4px 20px rgba(0,0,0,0.2); }
 
-  /* ── HOME QUICK ACTIONS ── */
-  .quick-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .quick-card {
-    padding: 16px; border-radius: 16px; cursor: pointer;
-    transition: transform .15s; border: 2px solid transparent;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .quick-card:active { transform: scale(.96); }
-  .quick-card.blue-c   { background: var(--blue-lite);  border-color: var(--blue); }
-  .quick-card.red-c    { background: var(--red-lite);   border-color: var(--red); }
-  .quick-card.green-c  { background: var(--mint-lite);  border-color: var(--mint); }
-  .quick-card.amber-c  { background: var(--amber-lite); border-color: var(--amber); }
-  .quick-card .qc-icon { font-size: 28px; }
-  .quick-card .qc-lbl  { font-size: 13px; font-weight: 800; color: var(--navy); }
-  .quick-card .qc-sub  { font-size: 11px; color: var(--sub); }
+/* ── Hero text ── */
+.hero-text { overflow:hidden; }
+.hero-line {
+  display:block; transform:translateY(100%); opacity:0;
+  animation:line-up 1s cubic-bezier(0.4,0,0.2,1) forwards;
+}
+.hero-line:nth-child(1){animation-delay:4.8s}
+.hero-line:nth-child(2){animation-delay:5s}
+.hero-line:nth-child(3){animation-delay:5.2s}
+@keyframes line-up { from{transform:translateY(60px);opacity:0} to{transform:translateY(0);opacity:1} }
+.hero-sub-reveal { opacity:0; transform:translateY(18px); animation:fade-up-sub 0.9s cubic-bezier(0.4,0,0.2,1) forwards; animation-delay:5.4s; }
+@keyframes fade-up-sub { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:translateY(0)} }
+.video-wrap { opacity:0; transform:translateY(24px) scale(0.98); animation:vid-in 1s cubic-bezier(0.4,0,0.2,1) forwards; animation-delay:5.5s; }
+@keyframes vid-in { to{opacity:1;transform:translateY(0) scale(1)} }
 
-  /* ref info bar */
-  .info-bar {
-    background: var(--navy); color: #fff;
-    border-radius: 14px; padding: 14px 16px;
-    display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
-  }
-  .info-bar .ib-icon { font-size: 28px; }
-  .info-bar .ib-text .t1 { font-size: 14px; font-weight: 800; }
-  .info-bar .ib-text .t2 { font-size: 11px; opacity: .7; margin-top: 2px; }
+/* ── Confetti ── */
+.confetti-piece {
+  position:fixed; width:7px; height:7px; border-radius:1px;
+  pointer-events:none; z-index:9997;
+  animation:confetti-fall 1.2s cubic-bezier(0.25,0.46,0.45,0.94) forwards;
+}
+@keyframes confetti-fall {
+  0%{opacity:1;transform:translate(0,0) rotate(0deg) scale(1)}
+  100%{opacity:0;transform:translate(var(--tx),var(--ty)) rotate(var(--r)) scale(0.4)}
+}
 
-  /* photo guide grid */
-  .photo-guide-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin: 12px 0; }
-  .pg-item { background: var(--bg); border-radius: 12px; padding: 10px 6px; text-align: center; }
-  .pg-item .pgi { font-size: 26px; }
-  .pg-item .pgt { font-size: 10px; font-weight: 700; color: var(--navy); margin-top: 4px; }
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background: var(--bg)}
+::-webkit-scrollbar-thumb{background: var(--fg)}
 
-  /* refusal doc */
-  .refusal-box { background: var(--amber-lite); border: 1.5px solid var(--amber); border-radius: 14px; padding: 14px; margin-bottom: 12px; }
-  .refusal-box .rt { font-size: 13px; font-weight: 800; color: #7a5000; }
-  .refusal-box .rd { font-size: 11px; color: #a06a10; margin-top: 4px; }
+/* ── Progress bar ── */
+#read-progress { position:fixed; top:0; left:0; height:2px; background: var(--fg); width:0%; z-index:9998; transition:width 0.1s linear; }
 
-  /* history item */
-  .hist-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); }
-  .hist-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-  .hist-dot.green { background: var(--mint); }
-  .hist-dot.amber { background: var(--amber); }
-  .hist-dot.red   { background: var(--red); }
-  .hist-info .hn  { font-size: 13px; font-weight: 700; }
-  .hist-info .hd  { font-size: 11px; color: var(--sub); }
-  .hist-score     { margin-left: auto; font-size: 18px; font-weight: 900; }
+/* ══ EXPERIENCE CARDS ══ */
+.exp-card {
+  border:1px solid var(--border);
+  border-radius:1.25rem; padding:1.75rem 2rem;
+  background: var(--card-bg);
+  transition:box-shadow 0.4s, border-color 0.4s ease, transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+  position:relative; overflow:hidden;
+}
+.exp-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:2px;
+  background: linear-gradient(90deg, var(--fg) 0%, var(--border) 100%);
+  transform:scaleX(0); transform-origin:left; transition:transform 0.5s;
+}
+.exp-card:hover { box-shadow:0 16px 50px rgba(0,0,0,0.12); border-color: var(--border-mid); transform:translateY(-3px); }
+.exp-card:hover::before { transform:scaleX(1); }
+.exp-badge {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:40px; height:40px; border-radius:10px;
+  background: var(--badge-bg); font-size:1rem; flex-shrink:0;
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.exp-card:hover .exp-badge { transform:scale(1.1) rotate(-5deg); }
+.exp-duration {
+  font-size:0.62rem; letter-spacing:0.14em; text-transform:uppercase;
+  color: var(--fg-faint); padding:0.4rem 0.9rem;
+  border:1px solid var(--border); border-radius:999px; white-space:nowrap;
+}
+.exp-connector { width:1px; height:2rem; background: var(--border); margin:0 auto; position:relative; overflow:hidden; }
+.exp-connector::after { content:''; position:absolute; top:-100%; width:100%; height:100%; background: var(--fg); animation:connector-fill 0.8s ease forwards; animation-play-state:paused; }
+.exp-connector.animate::after { animation-play-state:running; }
+@keyframes connector-fill { from{top:-100%} to{top:0} }
 
-  /* notification pill */
-  .notif-pill {
-    position: absolute; top: -4px; right: -4px;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: var(--red); color: #fff;
-    font-size: 9px; font-weight: 900;
-    display: flex; align-items: center; justify-content: center;
-  }
+/* ══ CONTACT FORM ══ */
+.contact-form { display:flex; flex-direction:column; gap:1.25rem; }
+.form-field {
+  display:flex; flex-direction:column; gap:0.5rem;
+}
+.form-field label { font-size:0.62rem; letter-spacing:0.18em; text-transform:uppercase; color: var(--fg-faint); }
+.form-field input,
+.form-field textarea {
+  background: var(--input-bg);
+  border:1px solid var(--input-border);
+  border-radius:0.75rem;
+  padding:1rem 1.25rem;
+  font-family:'Aeonik',sans-serif; font-size:0.9rem; font-weight:300;
+  color: var(--fg);
+  outline:none;
+  transition:border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  resize:none;
+}
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: var(--fg-faint); }
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: var(--fg);
+  box-shadow:0 0 0 3px rgba(10,10,10,0.07);
+}
+[data-theme="dark"] .form-field input:focus,
+[data-theme="dark"] .form-field textarea:focus {
+  box-shadow:0 0 0 3px rgba(240,240,240,0.07);
+}
+
+/* form submit button */
+.btn-submit {
+  background: var(--fg); color: var(--bg);
+  border:1px solid var(--fg); border-radius:999px;
+  padding:1rem 2.5rem; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase;
+  font-family:'Aeonik',sans-serif; font-weight:500; cursor:none;
+  width:fit-content;
+  transition:background 0.3s, color 0.3s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+  position:relative; overflow:hidden;
+}
+.btn-submit:hover { background:transparent; color: var(--fg); transform:scale(1.04); box-shadow:0 4px 20px rgba(0,0,0,0.12); }
+.btn-submit:active { transform:scale(0.97); }
+
+/* form success message */
+#form-success {
+  display:none; align-items:center; gap:1rem;
+  padding:1.25rem 1.5rem; border-radius:0.75rem;
+  background: var(--stat-bg); border:1px solid var(--border);
+  font-size:0.9rem; color: var(--fg-muted);
+}
+#form-success.show { display:flex; }
+#form-success .check { font-size:1.5rem; }
+
+/* ══ SKILLS SECTION (dark strip) ══ */
+#skills { background: var(--skill-bg); color: var(--skill-text); }
+#skills .sec-label { color: rgba(128,128,128,0.8); }
+[data-theme="dark"] #skills { background: #f0f0f0; }
+[data-theme="dark"] .stag-dark { border-color: rgba(0,0,0,0.18); color: rgba(0,0,0,0.75); }
+[data-theme="dark"] .stag-dark:hover { background: #0a0a0a; color: #fff; border-color: #0a0a0a; }
+
+/* ══ ABOUT TEXT COLORS ══ */
+.text-gray-600 { color: var(--fg-muted) !important; }
+.text-gray-500 { color: var(--fg-faint) !important; }
+.text-gray-400 { color: var(--fg-faint) !important; }
+[data-theme="dark"] .text-black { color: #f0f0f0 !important; }
+[data-theme="dark"] strong.text-black { color: #f0f0f0 !important; }
+
+/* ══ HIGHLIGHT BOX ══ */
+.highlight-box { background: var(--stat-bg); border-radius:0.75rem; padding:0.85rem 1rem; }
+.highlight-box p.text-xs { color: var(--fg-faint); }
+.highlight-box p.font-medium { color: var(--fg); }
+
+/* ══ ABOUT SECTION ══ */
+#about { background: var(--bg); }
+
+/* ══ PROJECTS SECTION ══ */
+#projects { background: var(--bg-alt); }
+
+/* ── Mobile ── */
+@media(max-width:640px){
+  header nav{padding:0 1.1rem}
+  #menu-btn{padding:0.65rem 1.2rem;font-size:0.68rem}
+  #close-btn{top:1rem;right:1rem;padding:0.65rem 1.2rem;font-size:0.68rem}
+  .hero-text h1{font-size:clamp(2rem,9vw,2.8rem)!important;line-height:1.12}
+  .hero-sub-reveal p{font-size:1rem;line-height:1.65}
+  .video-wrap video{border-radius:1.25rem}
+  section.py-28{padding-top:4rem;padding-bottom:4rem}
+  section.py-32{padding-top:4.5rem;padding-bottom:4.5rem}
+  .stat-row-mobile{display:flex;flex-direction:row;gap:0;border:1px solid var(--border);border-radius:1rem;overflow:hidden}
+  .stat-row-mobile .stat-item{flex:1;padding:1.1rem 0.75rem;text-align:center;border-right:1px solid var(--border)}
+  .stat-row-mobile .stat-item:last-child{border-right:none}
+  .stat-row-mobile .stat-num{font-size:1.8rem!important}
+  .contact-big{font-size:clamp(2rem,10vw,3rem)!important;line-height:1.05}
+  .stag,.stag-dark{padding:0.38rem 0.9rem;font-size:0.7rem}
+  .pcard{border-radius:1.1rem}
+  .exp-card{padding:1.25rem;border-radius:1rem}
+  footer{text-align:center}
+  #theme-btn{width:38px;height:38px}
+}
 </style>
 </head>
 <body>
 
-<div class="proto-bar">🦷 ORAL ALLY · <span>UX Prototype v1.0</span> · Tap to navigate between screens</div>
+<div id="read-progress"></div>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
 
-<div class="device-frame">
-  <div class="notch"></div>
+<button id="close-btn" aria-label="Close menu">
+  <span class="x-icon"></span> CLOSE
+</button>
 
-  <!-- ══════════════════════════════════════════
-       SCREEN 1 · LOGIN
-  ═══════════════════════════════════════════ -->
-  <div class="screen active" id="screen-login">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="login-hero">
-      <div class="login-logo">🦷</div>
-      <div class="login-title">Oral <em>Ally</em></div>
-      <div class="login-sub">Protecting Smiles, Preserving Dignity</div>
+<!-- PRELOADER -->
+<div id="preloader">
+  <h2 id="hello"></h2>
+</div>
+
+<!-- MENU OVERLAY -->
+<div id="menu-overlay">
+  <a href="#about" class="menu-link"><span class="menu-num">01</span>About</a>
+  <a href="#skills" class="menu-link"><span class="menu-num">02</span>Skills</a>
+  <a href="#experience" class="menu-link"><span class="menu-num">03</span>Experience</a>
+  <a href="#projects" class="menu-link"><span class="menu-num">04</span>Projects</a>
+  <a href="#contact" class="menu-link"><span class="menu-num">05</span>Contact</a>
+  <p style="color:rgba(255,255,255,.18);font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;margin-top:3rem;">Press ESC to close</p>
+</div>
+
+<!-- HEADER -->
+<header class="w-full py-6 md:mt-0" id="site-header">
+  <nav class="max-w-7xl mx-auto flex items-center justify-between px-6 md:px-10">
+    <h1 style="font-size:1.35rem;font-weight:300;letter-spacing:0.02em;text-decoration:underline;text-underline-offset:5px;text-decoration-thickness:1px;color:var(--fg);">
+      Nikhil Viswan
+    </h1>
+    <div class="flex items-center gap-3">
+      <!-- CV Download Button -->
+      <a href="Nikhil_V_Resume.pdf" download="Nikhil_V_Resume.pdf" class="btn-cv" aria-label="Download CV">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:0.7">
+          <path d="M8 1v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        CV
+      </a>
+      <!-- Theme toggle -->
+      <button id="theme-btn" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <span id="theme-icon">🌙</span>
+      </button>
+      <!-- Menu -->
+      <button id="menu-btn" aria-label="Open menu">
+        MENU <span>↝</span>
+      </button>
     </div>
-    <div class="scroll-area" style="padding-top:8px;">
-      <div class="form-group">
-        <label class="form-label">Staff ID</label>
-        <input class="form-input" type="text" placeholder="e.g. SENT-0042" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">PIN</label>
-        <input class="form-input" type="password" placeholder="• • • • • •" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Ward / Unit</label>
-        <select class="form-input" style="appearance:none;">
-          <option>Ward A – Dementia Care</option>
-          <option>Ward B – General Nursing</option>
-          <option>Ward C – Palliative</option>
-        </select>
-      </div>
-      <button class="btn primary" onclick="go('screen-home')">Login as Sentinel 🛡️</button>
-      <p style="text-align:center; margin-top:14px; font-size:12px; color:var(--sub);">Forgot PIN? Contact your Lead Nurse.</p>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="w-full py-10 px-6 md:px-10">
+  <div class="max-w-7xl mx-auto hero-text">
+    <h1 style="font-size:clamp(2.2rem,6vw,5.5rem);font-weight:300;line-height:1.1;letter-spacing:-0.02em;color:var(--fg);">
+      <span class="hero-line">Hi, I'm Nikhil — Designer &</span>
+      <span class="hero-line">Developer for Freelance,</span>
+      <span class="hero-line">startups, and next-gen brands.</span>
+    </h1>
+  </div>
+</section>
+
+<section class="py-8 px-6 md:px-10">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+    <div class="video-wrap">
+      <video src="assets/header_video.mp4" autoplay loop muted playsinline
+        class="w-full rounded-3xl object-cover shadow-xl"></video>
+    </div>
+    <div class="hero-sub-reveal" style="font-size:1.05rem;line-height:1.75;color:var(--fg-muted);">
+      <p>
+        Skilled in <span style="text-decoration:underline;color:var(--fg)">HTML</span>, <span style="text-decoration:underline;color:var(--fg)">CSS</span>,
+        <span style="text-decoration:underline;color:var(--fg)">JavaScript</span>, <span style="text-decoration:underline;color:var(--fg)">jQuery</span>,
+        <span style="text-decoration:underline;color:var(--fg)">Bootstrap</span>, and <span style="text-decoration:underline;color:var(--fg)">Tailwind CSS</span>
+        on the frontend, with a strong backend foundation using <span style="text-decoration:underline;color:var(--fg)">Python</span>,
+        <span style="text-decoration:underline;color:var(--fg)">Django</span>, and <span style="text-decoration:underline;color:var(--fg)">MySQL</span>.
+        Passionate about frontend design and creative problem-solving, with additional experience
+        in UI/UX prototyping using Figma.
+      </p>
     </div>
   </div>
+</section>
 
-  <!-- ══════════════════════════════════════════
-       SCREEN 2 · HOME DASHBOARD
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-home">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <div class="logo-icon">🦷</div>
-      <div class="brand">Oral <span>Ally</span></div>
-      <div style="margin-left:auto; position:relative;">
-        <button class="back-btn" onclick="go('screen-notifications')">🔔</button>
-        <div class="notif-pill">3</div>
-      </div>
-    </div>
-    <div class="scroll-area">
-      <!-- Welcome banner -->
-      <div class="info-bar">
-        <div class="ib-icon">🛡️</div>
-        <div class="ib-text">
-          <div class="t1">Good Morning, Sentinel Sarah!</div>
-          <div class="t2">Ward A · Tuesday 22 Apr 2025 · 6 checks due today</div>
-        </div>
-      </div>
-
-      <!-- Big Three Cards -->
-      <div class="section-title">Quick Actions</div>
-      <button class="btn blue" style="margin-bottom:10px;" onclick="go('screen-resident-list')">➕ &nbsp;Start New Check</button>
-      <div class="quick-grid">
-        <div class="quick-card red-c" onclick="go('screen-high-risk')">
-          <div class="qc-icon">🚨</div>
-          <div class="qc-lbl">High Risk</div>
-          <div class="qc-sub">2 residents</div>
-        </div>
-        <div class="quick-card green-c" onclick="go('screen-help')">
-          <div class="qc-icon">📖</div>
-          <div class="qc-lbl">Help & Guide</div>
-          <div class="qc-sub">OHAT reference</div>
-        </div>
-        <div class="quick-card amber-c" onclick="go('screen-resident-list')">
-          <div class="qc-icon">⏰</div>
-          <div class="qc-lbl">Due Today</div>
-          <div class="qc-sub">6 checks</div>
-        </div>
-        <div class="quick-card blue-c" onclick="go('screen-history')">
-          <div class="qc-icon">📊</div>
-          <div class="qc-lbl">History</div>
-          <div class="qc-sub">View all records</div>
-        </div>
-      </div>
-
-      <!-- Recent alerts -->
-      <div class="section-title">Recent Alerts</div>
-      <div class="card red" style="cursor:pointer;" onclick="go('screen-resident-profile')">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:20px;">🚨</span>
-          <div>
-            <div style="font-size:13px;font-weight:800;color:var(--red);">RED FLAG – Rm 14 · Margaret B.</div>
-            <div style="font-size:11px;color:var(--sub);margin-top:2px;">Score 11 · Referral required · 2 hrs ago</div>
-          </div>
-        </div>
-      </div>
-      <div class="card amber">
-        <div style="display:flex;align-items:center;gap:8px;">
-          <span style="font-size:20px;">⚠️</span>
-          <div>
-            <div style="font-size:13px;font-weight:800;color:#b77a10;">MONITOR – Rm 07 · James O.</div>
-            <div style="font-size:11px;color:var(--sub);margin-top:2px;">Score 6 · Increase brushing · Yesterday</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Stats bar -->
-      <div class="section-title">Today's Progress</div>
-      <div class="card">
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-          <span style="font-size:13px;font-weight:700;">Checks Completed</span>
-          <span style="font-size:13px;font-weight:900;color:var(--mint);">2 / 6</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:33%;background:var(--mint);"></div></div>
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="nav-item active" onclick="go('screen-home')"><span class="icon">🏠</span>Home</button>
-      <button class="nav-item" onclick="go('screen-resident-list')"><span class="icon">👥</span>Residents</button>
-      <button class="nav-item" onclick="go('screen-history')"><span class="icon">📊</span>History</button>
-      <button class="nav-item" onclick="go('screen-help')"><span class="icon">❓</span>Help</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 3 · RESIDENT LIST
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-resident-list">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-home')">←</button>
-      <div class="hdr-title">Residents</div>
-      <button class="hdr-action">Filter</button>
-    </div>
-    <div class="scroll-area">
-      <input class="form-input" style="margin-bottom:14px;" placeholder="🔍  Search resident name or room..." />
-      <div class="section-title">All Residents – Ward A</div>
-
-      <div class="resident-row" onclick="go('screen-resident-profile')">
-        <div class="avatar red">👵</div>
-        <div class="res-info">
-          <div class="res-name">Margaret Browne</div>
-          <div class="res-meta">Room 14 · 82 yrs · Last check: 2 days ago</div>
-          <div class="chip-row"><span class="badge red">🚨 Score 11</span><span class="badge water">💧 Dry Mouth Rx</span></div>
-        </div>
-      </div>
-
-      <div class="resident-row" onclick="go('screen-resident-profile')">
-        <div class="avatar amber">👴</div>
-        <div class="res-info">
-          <div class="res-name">James O'Brien</div>
-          <div class="res-meta">Room 07 · 75 yrs · Last check: Yesterday</div>
-          <div class="chip-row"><span class="badge amber">⚠️ Score 6</span></div>
-        </div>
-      </div>
-
-      <div class="resident-row" onclick="go('screen-resident-profile')">
-        <div class="avatar green">👩</div>
-        <div class="res-info">
-          <div class="res-name">Eleanor Walsh</div>
-          <div class="res-meta">Room 03 · 68 yrs · Last check: Today</div>
-          <div class="chip-row"><span class="badge green">✅ Score 2</span><span class="badge water">💧 Dry Mouth Rx</span></div>
-        </div>
-      </div>
-
-      <div class="resident-row" onclick="go('screen-resident-profile')">
-        <div class="avatar amber">🧓</div>
-        <div class="res-info">
-          <div class="res-name">Patrick Kelly</div>
-          <div class="res-meta">Room 11 · 79 yrs · Due today</div>
-          <div class="chip-row"><span class="badge amber">⏰ Check Due</span></div>
-        </div>
-      </div>
-
-      <div class="resident-row" onclick="go('screen-resident-profile')">
-        <div class="avatar green">👴</div>
-        <div class="res-info">
-          <div class="res-name">Thomas Flynn</div>
-          <div class="res-meta">Room 05 · 88 yrs · Check due tomorrow</div>
-          <div class="chip-row"><span class="badge green">✅ Score 1</span></div>
-        </div>
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="nav-item" onclick="go('screen-home')"><span class="icon">🏠</span>Home</button>
-      <button class="nav-item active" onclick="go('screen-resident-list')"><span class="icon">👥</span>Residents</button>
-      <button class="nav-item" onclick="go('screen-history')"><span class="icon">📊</span>History</button>
-      <button class="nav-item" onclick="go('screen-help')"><span class="icon">❓</span>Help</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 4 · RESIDENT PROFILE
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-resident-profile">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-resident-list')">←</button>
-      <div class="hdr-title">Resident Profile</div>
-      <button class="hdr-action">Edit</button>
-    </div>
-    <div class="scroll-area">
-      <!-- Profile header -->
-      <div style="text-align:center; padding: 10px 0 20px;">
-        <div style="font-size:60px;">👵</div>
-        <div style="font-size:20px;font-weight:900;color:var(--navy);margin-top:6px;">Margaret Browne</div>
-        <div style="font-size:13px;color:var(--sub);margin-top:2px;">Room 14 · Ward A · Age 82</div>
-        <div class="chip-row" style="justify-content:center;margin-top:8px;">
-          <span class="badge red">🚨 High Risk</span>
-          <span class="badge water">💧 Dry Mouth Alert</span>
-          <span class="badge blue">🦷 Has Dentures</span>
-        </div>
-      </div>
-
-      <!-- Dry mouth alert -->
-      <div class="card amber">
-        <div style="font-size:13px;font-weight:800;color:#b77a10;">💧 Dry Mouth Medication Alert</div>
-        <div style="font-size:12px;color:var(--text);margin-top:6px;">This resident is on <strong>Diuretics + Antidepressants</strong>. Pay close attention to <strong>Saliva (Score 2)</strong>. Offer frequent sips of water.</div>
-      </div>
-
-      <!-- Resident details -->
-      <div class="card">
-        <div class="section-title" style="margin-top:0;">Resident Details</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:13px;">
-          <div><div style="color:var(--sub);font-size:11px;font-weight:700;">DOB</div><div style="font-weight:700;">12 Mar 1942</div></div>
-          <div><div style="color:var(--sub);font-size:11px;font-weight:700;">NHS No.</div><div style="font-weight:700;">487 234 6521</div></div>
-          <div><div style="color:var(--sub);font-size:11px;font-weight:700;">Key Worker</div><div style="font-weight:700;">Nurse Lisa T.</div></div>
-          <div><div style="color:var(--sub);font-size:11px;font-weight:700;">POA Contact</div><div style="font-weight:700;">David Browne</div></div>
-          <div><div style="color:var(--sub);font-size:11px;font-weight:700;">Dentures</div><div style="font-weight:700;">Upper + Lower</div></div>
-          <div><div style="color:var(--sub);font-size:11px;font-weight:700;">Last Score</div><div style="font-weight:700;color:var(--red);">11 🚨</div></div>
-        </div>
-      </div>
-
-      <!-- Last assessment summary -->
-      <div class="card">
-        <div class="section-title" style="margin-top:0;">Last Assessment</div>
-        <div style="font-size:12px;color:var(--sub);margin-bottom:10px;">22 Apr 2025 · By: Sentinel Sarah</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;">
-          <span class="badge green">Lips 0</span>
-          <span class="badge amber">Tongue 1</span>
-          <span class="badge red">Gums 2</span>
-          <span class="badge red">Saliva 2</span>
-          <span class="badge amber">Teeth 1</span>
-          <span class="badge red">Dentures 2</span>
-          <span class="badge red">Hygiene 2</span>
-          <span class="badge amber">Pain 1</span>
-        </div>
-      </div>
-
-      <button class="btn primary" onclick="go('screen-consent')">➕ Start New OHAT Check</button>
-      <button class="btn secondary" style="margin-top:8px;" onclick="go('screen-history')">📊 View Full History</button>
-    </div>
-    <div class="bottom-nav">
-      <button class="nav-item" onclick="go('screen-home')"><span class="icon">🏠</span>Home</button>
-      <button class="nav-item active" onclick="go('screen-resident-list')"><span class="icon">👥</span>Residents</button>
-      <button class="nav-item" onclick="go('screen-history')"><span class="icon">📊</span>History</button>
-      <button class="nav-item" onclick="go('screen-help')"><span class="icon">❓</span>Help</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 5 · CONSENT CHECK
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-consent">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-resident-profile')">←</button>
-      <div class="hdr-title">Consent & Check-In</div>
-    </div>
-    <div class="scroll-area">
-      <div class="card mint">
-        <div style="font-size:26px;margin-bottom:8px;">🛡️</div>
-        <div style="font-size:16px;font-weight:900;color:var(--navy);">Before You Begin</div>
-        <div style="font-size:13px;color:var(--text);margin-top:6px;">Please confirm consent and readiness for this OHAT oral health check.</div>
-      </div>
-
-      <!-- Consent toggle -->
-      <div class="section-title">Consent</div>
-      <div class="toggle-row">
-        <div>
-          <div class="toggle-label">Has the resident (or POA) given verbal consent for this oral health check?</div>
-          <div style="font-size:11px;color:var(--sub);margin-top:3px;">Required before proceeding</div>
-        </div>
-        <label class="toggle"><input type="checkbox" id="consent-check" onchange="handleConsent()"/><span class="slider"></span></label>
-      </div>
-
-      <div id="consent-denied" class="refusal-box" style="display:none;">
-        <div class="rt">⚠️ Consent Not Given</div>
-        <div class="rd">If the resident has refused, you must document this refusal instead of proceeding with the assessment.</div>
-        <button class="btn amber sm" style="margin-top:10px;" onclick="go('screen-refusal')">Document Refusal →</button>
-      </div>
-
-      <!-- Readiness checklist -->
-      <div class="section-title">Equipment Checklist</div>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;">
-          <input type="checkbox" style="width:18px;height:18px;accent-color:var(--mint);"/> Gloves & Mask worn
-        </label>
-        <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;">
-          <input type="checkbox" style="width:18px;height:18px;accent-color:var(--mint);"/> Penlight / torch available
-        </label>
-        <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;">
-          <input type="checkbox" style="width:18px;height:18px;accent-color:var(--mint);"/> Sterile spoon / depressor ready
-        </label>
-        <label style="display:flex;align-items:center;gap:10px;padding:12px;background:var(--bg);border-radius:12px;cursor:pointer;font-size:13px;font-weight:700;">
-          <input type="checkbox" style="width:18px;height:18px;accent-color:var(--mint);"/> Resident is in a comfortable position
-        </label>
-      </div>
-
-      <div style="height:16px;"></div>
-      <button class="btn primary" onclick="go('screen-assessment')">Begin OHAT Assessment →</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 6 · OHAT ASSESSMENT FORM
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-assessment">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-consent')">←</button>
-      <div class="hdr-title">OHAT Assessment</div>
-      <button class="hdr-action" onclick="go('screen-help')">Guide</button>
-    </div>
-    <div class="scroll-area">
-
-      <!-- Progress -->
-      <div class="card" style="padding:12px 14px;">
-        <div style="display:flex;justify-content:space-between;font-size:12px;font-weight:700;margin-bottom:4px;">
-          <span>Margaret Browne · Room 14</span>
-          <span style="color:var(--mint);">Step 1 of 8</span>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" style="width:12%;background:var(--mint);"></div></div>
-      </div>
-
-      <!-- 1. Lips -->
-      <div class="assess-item">
-        <div class="assess-name">👄 1. Lips</div>
-        <div class="assess-desc">Observe colour, moisture, and presence of sores or swelling at corners.</div>
-        <div class="score-row">
-          <button class="score-btn s0 selected" onclick="selectScore(this,'s0')">0 ✅<br/><small>Smooth, pink, moist</small></button>
-          <button class="score-btn s1" onclick="selectScore(this,'s1')">1 ⚠️<br/><small>Dry / chapped</small></button>
-          <button class="score-btn s2" onclick="selectScore(this,'s2')">2 🚨<br/><small>Swelling / ulcers</small></button>
-        </div>
-      </div>
-
-      <!-- 2. Tongue -->
-      <div class="assess-item">
-        <div class="assess-name">👅 2. Tongue</div>
-        <div class="assess-desc">Check colour, moisture, and coating (white / brown / furry).</div>
-        <div class="score-row">
-          <button class="score-btn s0" onclick="selectScore(this,'s0')">0 ✅<br/><small>Pink, moist, clean</small></button>
-          <button class="score-btn s1 selected" onclick="selectScore(this,'s1')">1 ⚠️<br/><small>Patchy / coating</small></button>
-          <button class="score-btn s2" onclick="selectScore(this,'s2')">2 🚨<br/><small>Red, sore, thrush</small></button>
-        </div>
-      </div>
-
-      <!-- 3. Gums -->
-      <div class="assess-item">
-        <div class="assess-name">🦷 3. Gums & Tissues</div>
-        <div class="assess-desc">Look for redness, puffiness, bleeding on brush, or abscesses.</div>
-        <div class="score-row">
-          <button class="score-btn s0" onclick="selectScore(this,'s0')">0 ✅<br/><small>Pink & firm</small></button>
-          <button class="score-btn s1" onclick="selectScore(this,'s1')">1 ⚠️<br/><small>Red / puffy</small></button>
-          <button class="score-btn s2 selected" onclick="selectScore(this,'s2')">2 🚨<br/><small>Abscess / bleeding</small></button>
-        </div>
-        <button class="btn secondary sm" style="margin-top:10px;" onclick="openPhotoModal()">📷 Add Clinical Photo</button>
-      </div>
-
-      <!-- 4. Saliva -->
-      <div class="assess-item">
-        <div class="assess-name">💧 4. Saliva <span class="badge water" style="font-size:10px;">Dry Mouth Alert</span></div>
-        <div class="assess-desc">Is the mouth moist? Is saliva watery or thick / absent?</div>
-        <div class="score-row">
-          <button class="score-btn s0" onclick="selectScore(this,'s0')">0 ✅<br/><small>Moist, watery</small></button>
-          <button class="score-btn s1" onclick="selectScore(this,'s1')">1 ⚠️<br/><small>Dry, sticky</small></button>
-          <button class="score-btn s2 selected" onclick="selectScore(this,'s2')">2 🚨<br/><small>Very dry / none</small></button>
-        </div>
-      </div>
-
-      <!-- 5. Natural Teeth -->
-      <div class="assess-item">
-        <div class="assess-name">🦷 5. Natural Teeth</div>
-        <div class="assess-desc">Count visible decay, broken, or very loose teeth.</div>
-        <div class="score-row">
-          <button class="score-btn s0" onclick="selectScore(this,'s0')">0 ✅<br/><small>No decay</small></button>
-          <button class="score-btn s1" onclick="selectScore(this,'s1')">1 ⚠️<br/><small>1–3 decay / 1 broken</small></button>
-          <button class="score-btn s2" onclick="selectScore(this,'s2')">2 🚨<br/><small>4+ decay / multiple broken</small></button>
-        </div>
-      </div>
-
-      <!-- 6. Dentures -->
-      <div class="assess-item">
-        <div class="assess-name">🦷 6. Dentures</div>
-        <div class="assess-desc">Check fit, cleanliness, labelling, and if resident can wear them.</div>
-        <div class="score-row">
-          <button class="score-btn s0" onclick="selectScore(this,'s0')">0 ✅<br/><small>Clean, fits, labelled</small></button>
-          <button class="score-btn s1" onclick="selectScore(this,'s1')">1 ⚠️<br/><small>Loose / worn</small></button>
-          <button class="score-btn s2 selected" onclick="selectScore(this,'s2')">2 🚨<br/><small>Broken / refused</small></button>
-        </div>
-        <button class="btn secondary sm" style="margin-top:10px;" onclick="openPhotoModal()">📷 Add Clinical Photo</button>
-      </div>
-
-      <!-- 7. Oral Hygiene -->
-      <div class="assess-item">
-        <div class="assess-name">🪥 7. Oral Hygiene</div>
-        <div class="assess-desc">Check for food particles or plaque visible on teeth / dentures.</div>
-        <div class="score-row">
-          <button class="score-btn s0" onclick="selectScore(this,'s0')">0 ✅<br/><small>Clean, no plaque</small></button>
-          <button class="score-btn s1" onclick="selectScore(this,'s1')">1 ⚠️<br/><small>1–2 areas</small></button>
-          <button class="score-btn s2 selected" onclick="selectScore(this,'s2')">2 🚨<br/><small>Heavy plaque / caked</small></button>
-        </div>
-      </div>
-
-      <!-- 8. Pain -->
-      <div class="assess-item">
-        <div class="assess-name">😣 8. Dental Pain</div>
-        <div class="assess-desc">Look for behavioural or physical signs of pain and discomfort.</div>
-        <div class="score-row">
-          <button class="score-btn s0" onclick="selectScore(this,'s0')">0 ✅<br/><small>No signs</small></button>
-          <button class="score-btn s1 selected" onclick="selectScore(this,'s1')">1 ⚠️<br/><small>Pulling face / agitation</small></button>
-          <button class="score-btn s2" onclick="selectScore(this,'s2')">2 🚨<br/><small>Swelling / crying out</small></button>
-        </div>
-      </div>
-
-      <!-- Notes field -->
-      <div class="form-group">
-        <label class="form-label">Additional Notes</label>
-        <textarea class="form-input" rows="3" placeholder="Any additional observations, e.g. resident behaviour, specific concerns…" style="resize:none;"></textarea>
-      </div>
-
-      <button class="btn primary" onclick="go('screen-results')">Submit Assessment →</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 7 · RESULTS / SUMMARY
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-results">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-assessment')">←</button>
-      <div class="hdr-title">Assessment Results</div>
-    </div>
-    <div class="scroll-area">
-      <!-- Score circle -->
-      <div style="text-align:center; padding: 16px 0 24px;">
-        <div class="score-summary-circle" style="background:var(--red-lite);border:4px solid var(--red);">
-          <div class="big-num" style="color:var(--red);">11</div>
-          <div class="lbl" style="color:var(--red);">/ 16</div>
-        </div>
-        <div class="badge red" style="font-size:14px;padding:8px 18px;">🚨 RED FLAG – Immediate Action Required</div>
-        <div style="font-size:12px;color:var(--sub);margin-top:10px;">Margaret Browne · Room 14 · 22 Apr 2025, 09:41</div>
-      </div>
-
-      <!-- Score breakdown -->
-      <div class="card">
-        <div class="section-title" style="margin-top:0;">Score Breakdown</div>
-        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
-          <div style="display:flex;justify-content:space-between;"><span>👄 Lips</span><span class="badge green">0</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>👅 Tongue</span><span class="badge amber">1</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>🦷 Gums & Tissues</span><span class="badge red">2</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>💧 Saliva</span><span class="badge red">2</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>🦷 Natural Teeth</span><span class="badge amber">1</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>🦷 Dentures</span><span class="badge red">2</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>🪥 Oral Hygiene</span><span class="badge red">2</span></div>
-          <div style="display:flex;justify-content:space-between;"><span>😣 Dental Pain</span><span class="badge amber">1</span></div>
-          <div class="divider"></div>
-          <div style="display:flex;justify-content:space-between;font-weight:900;"><span>TOTAL</span><span style="color:var(--red);">11 / 16</span></div>
-        </div>
-      </div>
-
-      <!-- Action required -->
-      <div class="card red">
-        <div style="font-size:14px;font-weight:900;color:var(--red);">🚨 Required Action</div>
-        <div style="font-size:13px;color:var(--text);margin-top:6px;line-height:1.6;">
-          Score ≥ 9 requires <strong>immediate notification of Lead Nurse</strong> for a dental referral. Do not delay.
-        </div>
-        <button class="btn red sm" style="margin-top:12px;" onclick="go('screen-escalation')">Notify Lead Nurse Now</button>
-      </div>
-
-      <button class="btn secondary" style="margin-top:4px;" onclick="go('screen-home')">Back to Dashboard</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 8 · ESCALATION / REFERRAL
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-escalation">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-results')">←</button>
-      <div class="hdr-title">Escalation</div>
-    </div>
-    <div class="scroll-area">
-      <div class="card red">
-        <div style="font-size:26px;margin-bottom:6px;">🚨</div>
-        <div style="font-size:16px;font-weight:900;color:var(--red);">RED FLAG – Dental Referral Required</div>
-        <div style="font-size:13px;color:var(--text);margin-top:6px;">Margaret Browne, Room 14. Total OHAT Score: <strong>11</strong>.</div>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Lead Nurse on Duty</label>
-        <select class="form-input">
-          <option>Nurse Lisa Thompson (Ward A Lead)</option>
-          <option>Nurse Paul Doherty (Deputy)</option>
-          <option>On-call Nurse</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Method of Notification</label>
-        <div style="display:flex;gap:8px;">
-          <button class="btn secondary sm" style="flex:1;">📞 Call</button>
-          <button class="btn secondary sm" style="flex:1;">💬 In-App Msg</button>
-          <button class="btn secondary sm" style="flex:1;">📋 Log Only</button>
-        </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Escalation Notes</label>
-        <textarea class="form-input" rows="4" placeholder="Describe the issue briefly for the Lead Nurse…">Resident Margaret Browne, Rm 14, OHAT Score 11. Bleeding gums, broken dentures, no saliva. Possible oral infection. Urgent dental review needed.</textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Urgency Level</label>
-        <div style="display:flex;gap:8px;">
-          <button class="btn red sm" style="flex:1;">🚨 Urgent (Today)</button>
-          <button class="btn amber sm" style="flex:1;">⚠️ Soon (48hrs)</button>
-          <button class="btn secondary sm" style="flex:1;">📅 Routine</button>
-        </div>
-      </div>
-      <button class="btn red" onclick="go('screen-home')">Send Escalation & Complete ✓</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 9 · HIGH RISK RESIDENTS
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-high-risk">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-home')">←</button>
-      <div class="hdr-title">High Risk Residents</div>
-    </div>
-    <div class="scroll-area">
-      <div class="card red" style="margin-bottom:16px;">
-        <div style="font-size:13px;font-weight:800;color:var(--red);">🚨 2 residents require immediate dental referral</div>
-        <div style="font-size:11px;color:var(--sub);margin-top:4px;">Scores above 8 in the last 7 days</div>
-      </div>
-
-      <div class="resident-row" onclick="go('screen-resident-profile')">
-        <div class="avatar red">👵</div>
-        <div class="res-info">
-          <div class="res-name">Margaret Browne</div>
-          <div class="res-meta">Room 14 · Score 11 · Checked today</div>
-          <div class="chip-row"><span class="badge red">🚨 Referral Due</span><span class="badge water">💧 Dry Mouth</span></div>
-        </div>
-        <div class="res-score red">11</div>
-      </div>
-
-      <div class="resident-row" onclick="go('screen-resident-profile')">
-        <div class="avatar red">🧓</div>
-        <div class="res-info">
-          <div class="res-name">Brigid Connolly</div>
-          <div class="res-meta">Room 09 · Score 10 · Checked 2 days ago</div>
-          <div class="chip-row"><span class="badge red">🚨 Referral Due</span></div>
-        </div>
-        <div class="res-score red">10</div>
-      </div>
-
-      <div class="section-title">Monitor (Score 4–8)</div>
-      <div class="resident-row" onclick="go('screen-resident-profile')">
-        <div class="avatar amber">👴</div>
-        <div class="res-info">
-          <div class="res-name">James O'Brien</div>
-          <div class="res-meta">Room 07 · Score 6 · Increase brushing</div>
-          <div class="chip-row"><span class="badge amber">⚠️ Monitor</span></div>
-        </div>
-        <div class="res-score amber">6</div>
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="nav-item" onclick="go('screen-home')"><span class="icon">🏠</span>Home</button>
-      <button class="nav-item active" onclick="go('screen-resident-list')"><span class="icon">👥</span>Residents</button>
-      <button class="nav-item" onclick="go('screen-history')"><span class="icon">📊</span>History</button>
-      <button class="nav-item" onclick="go('screen-help')"><span class="icon">❓</span>Help</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 10 · HISTORY
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-history">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-home')">←</button>
-      <div class="hdr-title">Assessment History</div>
-      <button class="hdr-action">Export</button>
-    </div>
-    <div class="scroll-area">
-      <input class="form-input" style="margin-bottom:14px;" placeholder="🔍  Search resident or date…" />
-      <div class="section-title">This Week</div>
-      <div class="hist-item">
-        <div class="hist-dot red"></div>
-        <div class="hist-info"><div class="hn">Margaret Browne · Rm 14</div><div class="hd">22 Apr 2025 · By Sarah M.</div></div>
-        <div class="hist-score" style="color:var(--red);">11</div>
-      </div>
-      <div class="hist-item">
-        <div class="hist-dot amber"></div>
-        <div class="hist-info"><div class="hn">James O'Brien · Rm 07</div><div class="hd">21 Apr 2025 · By Sarah M.</div></div>
-        <div class="hist-score" style="color:var(--amber);">6</div>
-      </div>
-      <div class="hist-item">
-        <div class="hist-dot green"></div>
-        <div class="hist-info"><div class="hn">Eleanor Walsh · Rm 03</div><div class="hd">22 Apr 2025 · By Sarah M.</div></div>
-        <div class="hist-score" style="color:var(--mint);">2</div>
-      </div>
-      <div class="hist-item">
-        <div class="hist-dot red"></div>
-        <div class="hist-info"><div class="hn">Brigid Connolly · Rm 09</div><div class="hd">20 Apr 2025 · By Tom K.</div></div>
-        <div class="hist-score" style="color:var(--red);">10</div>
-      </div>
-      <div class="hist-item">
-        <div class="hist-dot green"></div>
-        <div class="hist-info"><div class="hn">Thomas Flynn · Rm 05</div><div class="hd">19 Apr 2025 · By Sarah M.</div></div>
-        <div class="hist-score" style="color:var(--mint);">1</div>
-      </div>
-      <div class="section-title">Last Week</div>
-      <div class="hist-item">
-        <div class="hist-dot amber"></div>
-        <div class="hist-info"><div class="hn">Patrick Kelly · Rm 11</div><div class="hd">15 Apr 2025 · By Lisa T.</div></div>
-        <div class="hist-score" style="color:var(--amber);">5</div>
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="nav-item" onclick="go('screen-home')"><span class="icon">🏠</span>Home</button>
-      <button class="nav-item" onclick="go('screen-resident-list')"><span class="icon">👥</span>Residents</button>
-      <button class="nav-item active" onclick="go('screen-history')"><span class="icon">📊</span>History</button>
-      <button class="nav-item" onclick="go('screen-help')"><span class="icon">❓</span>Help</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 11 · HELP & PHOTO GUIDE
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-help">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-home')">←</button>
-      <div class="hdr-title">Help & OHAT Guide</div>
-    </div>
-    <div class="scroll-area">
-      <div class="section-title">OHAT Scoring Reference</div>
-      <div class="card">
-        <div style="display:flex;gap:8px;justify-content:center;margin-bottom:12px;">
-          <span class="badge green">0 = Healthy</span>
-          <span class="badge amber">1 = Monitor</span>
-          <span class="badge red">2 = Urgent</span>
-        </div>
-        <div style="font-size:13px;line-height:1.7;">
-          <div style="margin-bottom:8px;"><strong>👄 Lips:</strong> 0–Pink moist · 1–Dry chapped · 2–Swelling ulcers</div>
-          <div style="margin-bottom:8px;"><strong>👅 Tongue:</strong> 0–Pink clean · 1–Patchy coating · 2–Red sore thrush</div>
-          <div style="margin-bottom:8px;"><strong>🦷 Gums:</strong> 0–Pink firm · 1–Red puffy · 2–Abscess bleeding</div>
-          <div style="margin-bottom:8px;"><strong>💧 Saliva:</strong> 0–Moist watery · 1–Dry sticky · 2–None present</div>
-          <div style="margin-bottom:8px;"><strong>🦷 Teeth:</strong> 0–No decay · 1–1-3 decay · 2–4+ / broken</div>
-          <div style="margin-bottom:8px;"><strong>🦷 Dentures:</strong> 0–Clean fit labelled · 1–Loose worn · 2–Broken missing</div>
-          <div style="margin-bottom:8px;"><strong>🪥 Hygiene:</strong> 0–Clean · 1–1-2 areas · 2–Heavy plaque</div>
-          <div><strong>😣 Pain:</strong> 0–None · 1–Behavioral signs · 2–Physical signs</div>
-        </div>
-      </div>
-
-      <div class="section-title">Total Score Actions</div>
-      <div class="card mint" style="margin-bottom:8px;">
-        <div style="font-size:14px;font-weight:800;">✅ Score 0–3: Healthy</div>
-        <div style="font-size:12px;margin-top:4px;">Maintain standard daily oral care routine.</div>
-      </div>
-      <div class="card amber" style="margin-bottom:8px;">
-        <div style="font-size:14px;font-weight:800;">⚠️ Score 4–8: Monitor</div>
-        <div style="font-size:12px;margin-top:4px;">Increase brushing to 3× daily. Re-check in 72 hours.</div>
-      </div>
-      <div class="card red" style="margin-bottom:14px;">
-        <div style="font-size:14px;font-weight:800;">🚨 Score 9+: RED FLAG</div>
-        <div style="font-size:12px;margin-top:4px;">Notify Lead Nurse immediately for dental referral.</div>
-      </div>
-
-      <div class="section-title">Clinical Photo Guide</div>
-      <div class="photo-guide-grid">
-        <div class="pg-item"><div class="pgi">👄</div><div class="pgt">Front View<br/>Lips & Teeth</div></div>
-        <div class="pg-item"><div class="pgi">🔦</div><div class="pgt">Side View<br/>Retract Cheek</div></div>
-        <div class="pg-item"><div class="pgi">👅</div><div class="pgt">Lower Arch<br/>Retract Tongue</div></div>
-      </div>
-      <div class="help-row"><div class="hi">💡</div><div><div class="ht">Lighting</div><div class="hd">Turn on room light AND use phone flash.</div></div></div>
-      <div class="help-row"><div class="hi">🥄</div><div><div class="ht">Retraction</div><div class="hd">Use a clean plastic spoon or tongue depressor — never fingers.</div></div></div>
-      <div class="help-row"><div class="hi">📱</div><div><div class="ht">Focus</div><div class="hd">Tap the screen on the area of concern. If blurry, retake immediately.</div></div></div>
-      <div class="help-row"><div class="hi">🛡️</div><div><div class="ht">Privacy</div><div class="hd">Photos never save to your personal camera roll. Consent required before every photo.</div></div></div>
-
-      <div class="section-title">Pro Tips</div>
-      <div class="card mint">
-        <div style="font-size:13px;line-height:1.7;">🔦 <strong>Use a penlight</strong> — you cannot score accurately without seeing under the tongue and the back of the mouth.<br/><br/>💧 If resident is on <strong>diuretics, antidepressants or inhalers</strong>, watch for dry mouth (Score 2 on Saliva).<br/><br/>📸 <strong>When in doubt, snap a shout</strong> — take a photo and notify your Lead Nurse.</div>
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="nav-item" onclick="go('screen-home')"><span class="icon">🏠</span>Home</button>
-      <button class="nav-item" onclick="go('screen-resident-list')"><span class="icon">👥</span>Residents</button>
-      <button class="nav-item" onclick="go('screen-history')"><span class="icon">📊</span>History</button>
-      <button class="nav-item active" onclick="go('screen-help')"><span class="icon">❓</span>Help</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 12 · REFUSAL DOCUMENTATION
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-refusal">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-consent')">←</button>
-      <div class="hdr-title">Document Refusal</div>
-    </div>
-    <div class="scroll-area">
-      <div class="card amber">
-        <div style="font-size:14px;font-weight:800;color:#7a5000;">⚠️ Documenting Resident Refusal</div>
-        <div style="font-size:12px;margin-top:6px;color:var(--text);">The resident or their POA has declined this oral health assessment. Please complete the fields below for the clinical record.</div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Resident Name</label>
-        <input class="form-input" type="text" value="Margaret Browne" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Date & Time</label>
-        <input class="form-input" type="text" value="22 Apr 2025, 09:41" />
-      </div>
-      <div class="form-group">
-        <label class="form-label">Reason for Refusal</label>
-        <select class="form-input">
-          <option>Resident verbally declined</option>
-          <option>Resident physically unwell</option>
-          <option>POA declined on behalf</option>
-          <option>Resident distressed / agitated</option>
-          <option>Other (see notes)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Notes</label>
-        <textarea class="form-input" rows="3" placeholder="Add any relevant detail about the refusal…"></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Follow-up Planned</label>
-        <input class="form-input" type="text" placeholder="e.g. Retry tomorrow morning" />
-      </div>
-      <div class="toggle-row">
-        <div class="toggle-label">Lead Nurse notified of refusal?</div>
-        <label class="toggle"><input type="checkbox" /><span class="slider"></span></label>
-      </div>
-      <button class="btn amber" onclick="go('screen-home')">Save Refusal Record ✓</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       SCREEN 13 · NOTIFICATIONS
-  ═══════════════════════════════════════════ -->
-  <div class="screen" id="screen-notifications">
-    <div class="status-bar"><span>9:41 AM</span><span>🔋 WiFi</span></div>
-    <div class="app-header">
-      <button class="back-btn" onclick="go('screen-home')">←</button>
-      <div class="hdr-title">Notifications</div>
-      <button class="hdr-action">Clear All</button>
-    </div>
-    <div class="scroll-area">
-      <div class="section-title">Today</div>
-      <div class="card red" style="cursor:pointer;" onclick="go('screen-resident-profile')">
-        <div style="display:flex;gap:10px;">
-          <span style="font-size:22px;">🚨</span>
-          <div>
-            <div style="font-size:13px;font-weight:800;color:var(--red);">Referral not yet raised</div>
-            <div style="font-size:12px;color:var(--text);margin-top:2px;">Margaret Browne (Rm 14) scored 11. Dental referral is overdue. Notify Lead Nurse.</div>
-            <div style="font-size:11px;color:var(--sub);margin-top:4px;">2 hrs ago</div>
-          </div>
-        </div>
-      </div>
-      <div class="card amber">
-        <div style="display:flex;gap:10px;">
-          <span style="font-size:22px;">⏰</span>
-          <div>
-            <div style="font-size:13px;font-weight:800;color:#b77a10;">Check due in 1 hour</div>
-            <div style="font-size:12px;color:var(--text);margin-top:2px;">Patrick Kelly (Rm 11) is due for their 72-hour re-check.</div>
-            <div style="font-size:11px;color:var(--sub);margin-top:4px;">30 min ago</div>
-          </div>
-        </div>
-      </div>
-      <div class="card mint">
-        <div style="display:flex;gap:10px;">
-          <span style="font-size:22px;">💧</span>
-          <div>
-            <div style="font-size:13px;font-weight:800;color:var(--mint-dark);">Dry Mouth Reminder</div>
-            <div style="font-size:12px;color:var(--text);margin-top:2px;">Eleanor Walsh (Rm 03) is on antidepressants. Offer water and check saliva during today's visit.</div>
-            <div style="font-size:11px;color:var(--sub);margin-top:4px;">1 hr ago</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="bottom-nav">
-      <button class="nav-item" onclick="go('screen-home')"><span class="icon">🏠</span>Home</button>
-      <button class="nav-item" onclick="go('screen-resident-list')"><span class="icon">👥</span>Residents</button>
-      <button class="nav-item" onclick="go('screen-history')"><span class="icon">📊</span>History</button>
-      <button class="nav-item" onclick="go('screen-help')"><span class="icon">❓</span>Help</button>
-    </div>
-  </div>
-
-  <!-- ══════════════════════════════════════════
-       MODAL · PHOTO CAPTURE
-  ═══════════════════════════════════════════ -->
-  <div class="modal-overlay" id="photo-modal" onclick="closePhotoModal(event)">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <div class="modal-title">📷 Clinical Photo</div>
-      <div class="modal-sub">Please confirm consent before the camera opens.</div>
-
-      <div class="toggle-row" style="margin-bottom:16px;">
-        <div>
-          <div class="toggle-label">I confirm the resident (or their POA) has consented to this clinical photograph for the purpose of care assessment.</div>
-        </div>
-        <label class="toggle"><input type="checkbox" id="photo-consent"/><span class="slider"></span></label>
-      </div>
-
-      <div class="section-title" style="margin-top:0;">Three Golden Rules</div>
-      <div class="help-row"><div class="hi">💡</div><div><div class="ht">Lighting</div><div class="hd">Turn on room light and use phone flash.</div></div></div>
-      <div class="help-row"><div class="hi">🥄</div><div><div class="ht">Retraction</div><div class="hd">Use a clean plastic spoon or tongue depressor to gently move the cheek aside. Never use fingers.</div></div></div>
-      <div class="help-row"><div class="hi">🎯</div><div><div class="ht">Focus</div><div class="hd">Tap the screen on area of concern. If blurry, retake immediately.</div></div></div>
-
-      <div style="height:14px;"></div>
-      <button class="btn primary" onclick="closePhotoModal()">Open Camera 📷</button>
-      <button class="btn secondary" style="margin-top:8px;" onclick="closePhotoModal()">Cancel</button>
-    </div>
-  </div>
-
-</div><!-- end device-frame -->
-
-<!-- ── SCREEN MAP ── -->
-<div style="width:390px;margin-top:24px;padding:0 4px;">
-  <div style="font-size:12px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;text-align:center;">Screen Map – tap to jump</div>
-  <div style="display:flex;flex-wrap:wrap;gap:6px;justify-content:center;">
-    <button onclick="go('screen-login')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">1· Login</button>
-    <button onclick="go('screen-home')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">2· Home</button>
-    <button onclick="go('screen-resident-list')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">3· Residents</button>
-    <button onclick="go('screen-resident-profile')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">4· Profile</button>
-    <button onclick="go('screen-consent')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">5· Consent</button>
-    <button onclick="go('screen-assessment')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">6· Assessment</button>
-    <button onclick="go('screen-results')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">7· Results</button>
-    <button onclick="go('screen-escalation')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">8· Escalation</button>
-    <button onclick="go('screen-high-risk')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">9· High Risk</button>
-    <button onclick="go('screen-history')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">10· History</button>
-    <button onclick="go('screen-help')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">11· Help</button>
-    <button onclick="go('screen-refusal')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">12· Refusal</button>
-    <button onclick="go('screen-notifications')" style="padding:6px 12px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;cursor:pointer;color:var(--navy);">13· Notifications</button>
+<!-- MARQUEE -->
+<div class="marquee-wrap border-y py-4 mt-8" style="border-color:var(--border);">
+  <div class="marquee-track sec-label">
+    <span class="px-10">Frontend Development</span><span class="px-4">·</span>
+    <span class="px-10">UI / UX Design</span><span class="px-4">·</span>
+    <span class="px-10">Backend Engineering</span><span class="px-4">·</span>
+    <span class="px-10">Django & Python</span><span class="px-4">·</span>
+    <span class="px-10">Figma to Code</span><span class="px-4">·</span>
+    <span class="px-10">Responsive Interfaces</span><span class="px-4">·</span>
+    <span class="px-10">Frontend Development</span><span class="px-4">·</span>
+    <span class="px-10">UI / UX Design</span><span class="px-4">·</span>
+    <span class="px-10">Backend Engineering</span><span class="px-4">·</span>
+    <span class="px-10">Django & Python</span><span class="px-4">·</span>
+    <span class="px-10">Figma to Code</span><span class="px-4">·</span>
+    <span class="px-10">Responsive Interfaces</span><span class="px-4">·</span>
   </div>
 </div>
 
+<!-- ABOUT -->
+<section id="about" class="py-28 px-6 md:px-10">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-16 md:gap-24">
+    <div class="md:w-1/3 flex flex-col gap-14">
+      <div class="reveal-l">
+        <p class="sec-label mb-5">01 — About</p>
+        <hr class="divider" />
+      </div>
+      <!-- Desktop stats -->
+      <div class="flex flex-col gap-10 reveal-l stat-row-desktop" style="transition-delay:.14s">
+        <div class="stat-item">
+          <p class="stat-num" data-target="2" style="color:var(--fg)">0</p>
+          <p class="sec-label mt-1">Years Experience</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-num" data-target="15" style="color:var(--fg)">0</p>
+          <p class="sec-label mt-1">Figma Designs Shipped</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-num" data-target="10" style="color:var(--fg)">0</p>
+          <p class="sec-label mt-1">Responsive UIs Built</p>
+        </div>
+      </div>
+      <!-- Mobile stats -->
+      <div class="stat-row-mobile reveal" style="display:none;transition-delay:.14s">
+        <div class="stat-item">
+          <p class="stat-num" data-target="2" style="color:var(--fg)">0</p>
+          <p class="sec-label mt-1">Years Exp.</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-num" data-target="15" style="color:var(--fg)">0</p>
+          <p class="sec-label mt-1">Designs</p>
+        </div>
+        <div class="stat-item">
+          <p class="stat-num" data-target="10" style="color:var(--fg)">0</p>
+          <p class="sec-label mt-1">UIs Built</p>
+        </div>
+      </div>
+    </div>
+    <div class="md:w-2/3">
+      <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:300;line-height:1.2;letter-spacing:-0.02em;color:var(--fg);" class="mb-10 reveal">
+        Detail-oriented developer<br/>who turns designs into<br/>experiences.
+      </h2>
+      <div class="space-y-5 text-base leading-relaxed reveal" style="color:var(--fg-muted);transition-delay:.12s">
+        <p>I'm a Full Stack Developer with hands-on production experience at Appzia Tec Solutions. My work sits at the intersection of clean engineering and thoughtful design — I care deeply about how an interface <em>feels</em>, not just how it functions.</p>
+        <p>Proficient in <strong style="font-weight:500;color:var(--fg)">HTML, CSS, JavaScript, Bootstrap, and Tailwind</strong> on the frontend, with a solid backend foundation in <strong style="font-weight:500;color:var(--fg)">Python, Django, and MySQL</strong>. I bridge the gap between Figma mockups and production code — reliably and fast.</p>
+        <p>Outside work I explore interaction patterns, editorial typography, and anything that makes the web feel more human.</p>
+      </div>
+      <div class="mt-10 flex items-center gap-4 reveal" style="transition-delay:.22s">
+        <a href="mailto:nikhilvishwan91@gmail.com" class="btn-dark">Get in touch ↓</a>
+        <a href="Nikhil_V_Resume.pdf" download="Nikhil_V_Resume.pdf" class="btn-cv">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none" style="flex-shrink:0;opacity:0.7">
+            <path d="M8 1v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Download CV
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" class="py-28 px-6 md:px-10">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row gap-16">
+    <div class="md:w-1/3 reveal-l">
+      <p class="sec-label mb-5">02 — Skills</p>
+      <hr style="border:none;border-top:1px solid rgba(128,128,128,0.2);" />
+      <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:300;line-height:1.2;letter-spacing:-0.02em;margin-top:2rem;">
+        Technologies<br/><span style="opacity:0.45">I work with</span>
+      </h2>
+    </div>
+    <div class="md:w-2/3 flex flex-col gap-10 reveal" style="transition-delay:.1s">
+      <div>
+        <p class="sec-label mb-5">Languages</p>
+        <div class="flex flex-wrap gap-3">
+          <span class="stag-dark">HTML5</span>
+          <span class="stag-dark">CSS3</span>
+          <span class="stag-dark">JavaScript</span>
+          <span class="stag-dark">Python</span>
+          <span class="stag-dark">MySQL</span>
+        </div>
+      </div>
+      <div>
+        <p class="sec-label mb-5">Frameworks & Libraries</p>
+        <div class="flex flex-wrap gap-3">
+          <span class="stag-dark">React</span>
+          <span class="stag-dark">Django</span>
+          <span class="stag-dark">Tailwind CSS</span>
+          <span class="stag-dark">Bootstrap</span>
+          <span class="stag-dark">jQuery</span>
+        </div>
+      </div>
+      <div>
+        <p class="sec-label mb-5">Tools & Design</p>
+        <div class="flex flex-wrap gap-3">
+          <span class="stag-dark">Figma</span>
+          <span class="stag-dark">Adobe XD</span>
+          <span class="stag-dark">Photoshop</span>
+          <span class="stag-dark">Git</span>
+          <span class="stag-dark">Microsoft Office</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience" class="py-28 px-6 md:px-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-16 reveal">
+      <p class="sec-label mb-5">03 — Experience</p>
+      <hr class="divider" />
+    </div>
+    <div class="flex flex-col md:flex-row gap-16">
+      <div class="md:w-1/3 reveal-l">
+        <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:300;line-height:1.2;letter-spacing:-0.02em;color:var(--fg);" class="md:sticky md:top-32">
+          Where I've<br/>been working
+        </h2>
+      </div>
+      <div class="md:w-2/3 flex flex-col" id="exp-list">
+        <!-- Card 1 -->
+        <div class="exp-card reveal" style="transition-delay:.05s">
+          <div class="flex items-start justify-between gap-4 mb-5">
+            <div class="flex items-center gap-3">
+              <div class="exp-badge">💼</div>
+              <div>
+                <h3 style="font-size:1.1rem;font-weight:500;color:var(--fg)">Frontend Developer</h3>
+                <p style="font-size:0.85rem;color:var(--fg-muted);margin-top:2px">Appzia Tec Solutions</p>
+                <p class="sec-label" style="font-size:0.58rem;margin-top:2px">Sultan Bathery, Wayanad</p>
+              </div>
+            </div>
+            <span class="exp-duration">Jun 2024 – May 2025</span>
+          </div>
+          <hr style="border:none;border-top:1px solid var(--border);margin-bottom:1.1rem;" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+            <div class="highlight-box"><p class="text-xs mb-1">Responsive UIs</p><p style="font-size:1rem;font-weight:500;color:var(--fg)">10+</p></div>
+            <div class="highlight-box"><p class="text-xs mb-1">Figma → Code</p><p style="font-size:1rem;font-weight:500;color:var(--fg)">15+ designs</p></div>
+            <div class="highlight-box"><p class="text-xs mb-1">Dev cycle saved</p><p style="font-size:1rem;font-weight:500;color:var(--fg)">25% faster</p></div>
+            <div class="highlight-box"><p class="text-xs mb-1">Load speed gain</p><p style="font-size:1rem;font-weight:500;color:var(--fg)">−1.5 s</p></div>
+          </div>
+          <ul class="space-y-2" style="font-size:0.88rem;line-height:1.65;color:var(--fg-muted)">
+            <li class="flex gap-2.5"><span style="margin-top:8px;width:4px;height:4px;border-radius:50%;background:var(--fg);flex-shrink:0;display:block;"></span>Designed & maintained <strong style="font-weight:500;color:var(--fg)">10+ responsive UIs</strong> using HTML5, CSS3, Bootstrap, and Tailwind CSS.</li>
+            <li class="flex gap-2.5"><span style="margin-top:8px;width:4px;height:4px;border-radius:50%;background:var(--fg);flex-shrink:0;display:block;"></span>Implemented accessibility best practices across <strong style="font-weight:500;color:var(--fg)">5+ live projects</strong>, boosting user engagement by <strong style="font-weight:500;color:var(--fg)">20%</strong>.</li>
+            <li class="flex gap-2.5"><span style="margin-top:8px;width:4px;height:4px;border-radius:50%;background:var(--fg);flex-shrink:0;display:block;"></span>Optimised frontend performance — average load speed improved by <strong style="font-weight:500;color:var(--fg)">1.5 s</strong>.</li>
+          </ul>
+          <div class="flex flex-wrap gap-2 mt-5">
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">HTML</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">CSS</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">JavaScript</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Bootstrap</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Tailwind</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Figma</span>
+          </div>
+        </div>
+
+        <div class="flex justify-start pl-5 my-2">
+          <div class="exp-connector" id="exp-connector"></div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="exp-card reveal" style="transition-delay:.15s">
+          <div class="flex items-start justify-between gap-4 mb-5">
+            <div class="flex items-center gap-3">
+              <div class="exp-badge">🚀</div>
+              <div>
+                <h3 style="font-size:1.1rem;font-weight:500;color:var(--fg)">Full Stack Developer Intern</h3>
+                <p style="font-size:0.85rem;color:var(--fg-muted);margin-top:2px">One Team Solutions</p>
+                <p class="sec-label" style="font-size:0.58rem;margin-top:2px">Edappally Toll, Kerala</p>
+              </div>
+            </div>
+            <span class="exp-duration">Sep 2023 – Mar 2024</span>
+          </div>
+          <hr style="border:none;border-top:1px solid var(--border);margin-bottom:1.1rem;" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+            <div class="highlight-box"><p class="text-xs mb-1">Full-stack apps built</p><p style="font-size:1rem;font-weight:500;color:var(--fg)">3+</p></div>
+            <div class="highlight-box"><p class="text-xs mb-1">SQL queries written</p><p style="font-size:1rem;font-weight:500;color:var(--fg)">25+</p></div>
+            <div class="highlight-box"><p class="text-xs mb-1">Feature rollout speed</p><p style="font-size:1rem;font-weight:500;color:var(--fg)">+15% faster</p></div>
+            <div class="highlight-box"><p class="text-xs mb-1">Bugs squashed</p><p style="font-size:1rem;font-weight:500;color:var(--fg)">10+ 🐛</p></div>
+          </div>
+          <ul class="space-y-2" style="font-size:0.88rem;line-height:1.65;color:var(--fg-muted)">
+            <li class="flex gap-2.5"><span style="margin-top:8px;width:4px;height:4px;border-radius:50%;background:var(--fg);flex-shrink:0;display:block;"></span>Engineered <strong style="font-weight:500;color:var(--fg)">3+ full-stack web apps</strong> with HTML, CSS, JS, Django & MySQL.</li>
+            <li class="flex gap-2.5"><span style="margin-top:8px;width:4px;height:4px;border-radius:50%;background:var(--fg);flex-shrink:0;display:block;"></span>Built reusable components & modular backend logic, accelerating feature rollout by <strong style="font-weight:500;color:var(--fg)">15%</strong>.</li>
+            <li class="flex gap-2.5"><span style="margin-top:8px;width:4px;height:4px;border-radius:50%;background:var(--fg);flex-shrink:0;display:block;"></span>Contributed to on-time Agile sprint delivery; resolved <strong style="font-weight:500;color:var(--fg)">10+ QA defects</strong>.</li>
+          </ul>
+          <div class="flex flex-wrap gap-2 mt-5">
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Python</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Django</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">MySQL</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">JavaScript</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">HTML/CSS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects" class="py-28 px-6 md:px-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-16 reveal">
+      <p class="sec-label mb-5">04 — Projects</p>
+      <hr class="divider" />
+    </div>
+    <h2 style="font-size:clamp(1.8rem,4vw,3rem);font-weight:300;letter-spacing:-0.02em;color:var(--fg);" class="mb-16 reveal">
+      Selected work
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="pcard reveal-scale" style="transition-delay:.04s">
+        <div class="pcard-overlay"><span class="sec-label" style="color:#fff">View Project ↗</span></div>
+        <div class="p-8 md:p-10">
+          <div class="flex items-start justify-between mb-6">
+            <span class="stag" style="font-size:.65rem;letter-spacing:.12em;">E-Commerce</span>
+            <span style="font-size:0.75rem;color:var(--fg-faint)">Feb 2025</span>
+          </div>
+          <h3 style="font-size:clamp(1.4rem,3vw,1.9rem);font-weight:300;letter-spacing:-0.01em;color:var(--fg);margin-bottom:0.75rem">E-Commerce Web Application</h3>
+          <p style="font-size:0.85rem;line-height:1.7;color:var(--fg-muted);margin-bottom:2rem">A full e-commerce platform with user login, product catalogue, cart, and order management — built for scale and real users.</p>
+          <div class="flex flex-wrap gap-2">
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">HTML</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">CSS</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">JavaScript</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Bootstrap</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Python</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Django</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">MySQL</span>
+          </div>
+        </div>
+      </div>
+      <div class="pcard reveal-scale" style="transition-delay:.12s">
+        <div class="pcard-overlay"><span class="sec-label" style="color:#fff">View Project ↗</span></div>
+        <div class="p-8 md:p-10">
+          <div class="flex items-start justify-between mb-6">
+            <span class="stag" style="font-size:.65rem;letter-spacing:.12em;">Web Design</span>
+            <span style="font-size:0.75rem;color:var(--fg-faint)">Aug 2024</span>
+          </div>
+          <h3 style="font-size:clamp(1.4rem,3vw,1.9rem);font-weight:300;letter-spacing:-0.01em;color:var(--fg);margin-bottom:0.75rem">Education Consultancy Website</h3>
+          <p style="font-size:0.85rem;line-height:1.7;color:var(--fg-muted);margin-bottom:2rem">Fully responsive consultancy site supporting 5+ screen sizes. Mobile-first design boosted engagement by <strong style="font-weight:500;color:var(--fg)">40%</strong> post-launch.</p>
+          <div class="flex flex-wrap gap-2">
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">HTML</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">CSS</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">JavaScript</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Bootstrap</span>
+            <span style="font-size:0.72rem;padding:0.3rem 0.75rem;border-radius:999px;background:var(--tag-bg);color:var(--fg-muted)">Tailwind CSS</span>
+          </div>
+        </div>
+      </div>
+      <div class="pcard col-span-1 md:col-span-2 flex flex-col md:flex-row items-center justify-between gap-6 p-8 md:p-10 reveal"
+        style="border-style:dashed;background:transparent;border-color:var(--border);transition-delay:.2s">
+        <p style="font-size:clamp(1rem,2.5vw,1.5rem);font-weight:300;color:var(--fg-faint)">More projects coming soon —</p>
+        <a href="#contact" class="btn-dark flex-shrink-0">Work with me ↝</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section id="contact" class="py-32 px-6 md:px-10">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-16 reveal">
+      <p class="sec-label mb-5">05 — Contact</p>
+      <hr class="divider" />
+    </div>
+    <div class="flex flex-col gap-16">
+      <!-- Big heading -->
+      <div class="reveal">
+        <h2 class="contact-big" style="color:var(--fg)">
+          Have a project<br/>in mind?<br/><span style="color:var(--fg-faint)">Let's build it.</span>
+        </h2>
+      </div>
+
+      <!-- Two columns: form + info -->
+      <div class="flex flex-col md:flex-row gap-16 items-start">
+
+        <!-- Contact Form -->
+        <div class="md:w-3/5 reveal" style="transition-delay:.08s">
+          <p class="sec-label mb-8">Send a message</p>
+          <div class="contact-form" id="contact-form">
+            <div class="form-field">
+              <label for="contact-name">Your Name</label>
+              <input type="text" id="contact-name" name="name" placeholder="Nikhil Viswan" autocomplete="name" />
+            </div>
+            <div class="form-field">
+              <label for="contact-email">Email Address</label>
+              <input type="email" id="contact-email" name="email" placeholder="hello@example.com" autocomplete="email" />
+            </div>
+            <div class="form-field">
+              <label for="contact-message">Message</label>
+              <textarea id="contact-message" name="message" rows="5" placeholder="Tell me about your project…"></textarea>
+            </div>
+            <!-- Success -->
+            <div id="form-success">
+              <span class="check">✅</span>
+              <div>
+                <p style="font-weight:500;color:var(--fg);font-size:0.9rem">Message sent!</p>
+                <p style="font-size:0.8rem;margin-top:2px">Thanks for reaching out. I'll get back to you soon.</p>
+              </div>
+            </div>
+            <button type="button" class="btn-submit" id="form-submit-btn">Send message ↝</button>
+          </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="md:w-2/5 flex flex-col gap-7 reveal" style="transition-delay:.18s">
+          <div>
+            <p class="sec-label mb-2">Email</p>
+            <a href="mailto:nikhilvishwan91@gmail.com" class="ulink" style="font-size:0.9rem;font-weight:500">nikhilvishwan91@gmail.com</a>
+          </div>
+          <div>
+            <p class="sec-label mb-2">LinkedIn</p>
+            <a href="https://linkedin.com/in/Nikhil-V" target="_blank" rel="noopener" class="ulink" style="font-size:0.9rem;font-weight:500">linkedin.com/in/Nikhil-V</a>
+          </div>
+          <div>
+            <p class="sec-label mb-2">GitHub</p>
+            <a href="https://github.com/nikhil-vishwan" target="_blank" rel="noopener" class="ulink" style="font-size:0.9rem;font-weight:500">github.com/nikhil-vishwan</a>
+          </div>
+          <div>
+            <p class="sec-label mb-2">Phone</p>
+            <a href="tel:+918838051873" class="ulink" style="font-size:0.9rem;font-weight:500">+91 88380 51873</a>
+          </div>
+          <div style="padding-top:1rem;border-top:1px solid var(--border)">
+            <p class="sec-label mb-3">Resume</p>
+            <a href="Nikhil_V_Resume.pdf" download="Nikhil_V_Resume.pdf" class="btn-cv">
+              <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+                <path d="M8 1v9M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Download CV
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="border-top:1px solid var(--border);padding:2rem 1.5rem;">
+  <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
+    <p class="sec-label">© 2025 Nikhil Viswan. All rights reserved.</p>
+    <p class="sec-label">Designed & Developed by Nikhil Viswan</p>
+  </div>
+</footer>
+
 <script>
-  function go(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const target = document.getElementById(id);
-    if (target) { target.classList.add('active'); target.scrollTop = 0; }
-    // scroll device to top
-    document.querySelector('.device-frame').scrollTop = 0;
-  }
+/* ══ PRELOADER ══ */
+const languages = ["Nikhil","നിഖിൽ","निखिल","尼希尔","ニヒル","நிகில்","نمستے","こんにちは","你好","안녕하세요","Olá","Hej","Merhaba","Γειά","سلام","Xin chào","Sawubona"];
+const helloEl = document.getElementById("hello");
+const preloader = document.getElementById("preloader");
+let idx = 0;
+function rotateHello() {
+  helloEl.style.opacity = "0"; helloEl.style.transform = "translateY(12px)";
+  setTimeout(() => {
+    helloEl.textContent = languages[idx % languages.length];
+    helloEl.style.opacity = "1"; helloEl.style.transform = "translateY(0)"; idx++;
+  }, 160);
+}
+rotateHello();
+const helloInterval = setInterval(rotateHello, 900);
+setTimeout(() => {
+  clearInterval(helloInterval);
+  preloader.style.opacity = "0";
+  setTimeout(() => { preloader.style.display = "none"; }, 800);
+}, 4500);
 
-  function selectScore(btn, cls) {
-    const row = btn.closest('.score-row');
-    row.querySelectorAll('.score-btn').forEach(b => b.classList.remove('selected'));
-    btn.classList.add('selected');
-  }
+/* ══ DARK / LIGHT MODE ══ */
+const html = document.documentElement;
+const themeBtn = document.getElementById("theme-btn");
+const themeIcon = document.getElementById("theme-icon");
 
-  function handleConsent() {
-    const checked = document.getElementById('consent-check').checked;
-    document.getElementById('consent-denied').style.display = checked ? 'none' : 'block';
-  }
+// Auto-detect system preference
+const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+const saved = localStorage.getItem("nv-theme");
+const initTheme = saved || (prefersDark ? "dark" : "light");
+html.setAttribute("data-theme", initTheme);
+themeIcon.textContent = initTheme === "dark" ? "☀︎" : "⏾";
 
-  function openPhotoModal() {
-    document.getElementById('photo-modal').classList.add('open');
+themeBtn.addEventListener("click", () => {
+  const current = html.getAttribute("data-theme");
+  const next = current === "dark" ? "light" : "dark";
+  html.setAttribute("data-theme", next);
+  themeIcon.textContent = next === "dark" ? "☀︎" : "⏾";
+  localStorage.setItem("nv-theme", next);
+});
+
+/* ══ CUSTOM CURSOR ══ */
+const cursorDot  = document.getElementById("cursor-dot");
+const cursorRing = document.getElementById("cursor-ring");
+const isPointerFine = window.matchMedia("(pointer:fine)").matches;
+if (isPointerFine) {
+  const trailCount = 8; const trail = [];
+  for (let i = 0; i < trailCount; i++) {
+    const d = document.createElement("div");
+    d.className = "cursor-trail-dot";
+    d.style.cssText = `width:${6-i*0.5}px;height:${6-i*0.5}px;mix-blend-mode:difference;background:#fff;`;
+    document.body.appendChild(d); trail.push({el:d,x:0,y:0});
   }
-  function closePhotoModal(e) {
-    if (!e || e.target === document.getElementById('photo-modal') || !e.target.closest('.modal-sheet') || e.target.tagName === 'BUTTON') {
-      document.getElementById('photo-modal').classList.remove('open');
+  let mouseX=0,mouseY=0,ringX=0,ringY=0;
+  document.addEventListener("mousemove", e => {
+    mouseX=e.clientX; mouseY=e.clientY;
+    cursorDot.style.left=mouseX+"px"; cursorDot.style.top=mouseY+"px";
+  });
+  function animateCursor() {
+    ringX += (mouseX-ringX)*0.12; ringY += (mouseY-ringY)*0.12;
+    cursorRing.style.left=ringX+"px"; cursorRing.style.top=ringY+"px";
+    let px=mouseX,py=mouseY;
+    trail.forEach((t,i) => {
+      const lag=0.15+i*0.04; t.x+=(px-t.x)*lag; t.y+=(py-t.y)*lag;
+      t.el.style.left=t.x+"px"; t.el.style.top=t.y+"px";
+      const dist=Math.hypot(mouseX-t.x,mouseY-t.y);
+      t.el.style.opacity=Math.max(0,0.35-i*0.04-dist*0.002);
+      px=t.x; py=t.y;
+    });
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  const hoverEls = "a, button, .stag, .stag-dark, .pcard, .btn-dark, .btn-cv, .btn-submit, .ulink, input, textarea";
+  document.querySelectorAll(hoverEls).forEach(el => {
+    el.addEventListener("mouseenter", () => document.body.classList.add("cursor-hover"));
+    el.addEventListener("mouseleave", () => document.body.classList.remove("cursor-hover"));
+  });
+  document.addEventListener("mousedown", () => document.body.classList.add("cursor-click"));
+  document.addEventListener("mouseup",   () => document.body.classList.remove("cursor-click"));
+} else {
+  cursorDot.style.display="none"; cursorRing.style.display="none";
+  document.body.style.cursor="auto";
+}
+
+/* ══ READ PROGRESS ══ */
+const progressBar = document.getElementById("read-progress");
+window.addEventListener("scroll", () => {
+  const scrollTop=window.scrollY; const docH=document.documentElement.scrollHeight-window.innerHeight;
+  progressBar.style.width=(scrollTop/docH*100)+"%";
+}, {passive:true});
+
+/* ══ STICKY HEADER ══ */
+const siteHeader = document.getElementById("site-header");
+window.addEventListener("scroll", () => siteHeader.classList.toggle("scrolled", window.scrollY>60), {passive:true});
+
+/* ══ MENU ══ */
+const menuBtn=document.getElementById("menu-btn");
+const closeBtn=document.getElementById("close-btn");
+const menuOverlay=document.getElementById("menu-overlay");
+let menuOpen=false;
+function toggleMenu(force) {
+  menuOpen=force!==undefined?force:!menuOpen;
+  menuOverlay.classList.toggle("open",menuOpen);
+  closeBtn.classList.toggle("visible",menuOpen);
+  document.body.style.overflow=menuOpen?"hidden":"";
+}
+menuBtn.addEventListener("click",()=>toggleMenu(true));
+closeBtn.addEventListener("click",()=>toggleMenu(false));
+document.querySelectorAll(".menu-link").forEach(l=>l.addEventListener("click",()=>toggleMenu(false)));
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"&&menuOpen)toggleMenu(false); });
+
+/* ══ SCROLL REVEAL ══ */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);} });
+}, {threshold:0.1});
+document.querySelectorAll(".reveal,.reveal-l,.reveal-scale").forEach(el=>io.observe(el));
+
+/* ══ STAT COUNTERS + CONFETTI ══ */
+const confettiColors=["#0a0a0a","#555","#999","#ddd","#333"];
+function spawnConfetti(el){
+  const rect=el.getBoundingClientRect(); const cx=rect.left+rect.width/2; const cy=rect.top+rect.height/2;
+  for(let i=0;i<16;i++){
+    const piece=document.createElement("div"); piece.className="confetti-piece";
+    const angle=(i/16)*360; const dist=40+Math.random()*50;
+    const tx=Math.cos(angle*Math.PI/180)*dist; const ty=Math.sin(angle*Math.PI/180)*dist-20;
+    piece.style.cssText=`left:${cx}px;top:${cy}px;background:${confettiColors[i%confettiColors.length]};border-radius:${Math.random()>.5?"50%":"2px"};--tx:${tx}px;--ty:${ty}px;--r:${Math.random()*720-360}deg;animation-duration:${0.9+Math.random()*0.5}s;`;
+    document.body.appendChild(piece); setTimeout(()=>piece.remove(),1500);
+  }
+}
+function animateCount(el,target,suffix){
+  const duration=1400; const start=performance.now();
+  el.classList.remove("popped");
+  function step(now){
+    const t=Math.min((now-start)/duration,1); const ease=1-Math.pow(1-t,3);
+    el.textContent=Math.floor(ease*target)+suffix;
+    if(t<1){requestAnimationFrame(step);}
+    else{el.textContent=target+suffix;el.classList.add("popped");spawnConfetti(el);}
+  }
+  requestAnimationFrame(step);
+}
+const statsObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      const num=entry.target.querySelector("[data-target]");
+      if(num)animateCount(num,parseInt(num.dataset.target),"+");
+      statsObserver.unobserve(entry.target);
     }
+  });
+},{threshold:0.5});
+document.querySelectorAll(".stat-item").forEach(el=>statsObserver.observe(el));
+
+/* ══ MOBILE STAT SWAP ══ */
+function handleMobileStats(){
+  const isMobile=window.innerWidth<=640;
+  const desktop=document.querySelector(".stat-row-desktop");
+  const mobile=document.querySelector(".stat-row-mobile");
+  if(!desktop||!mobile)return;
+  if(isMobile){desktop.style.display="none";mobile.style.display="flex";}
+  else{desktop.style.display="flex";mobile.style.display="none";}
+}
+handleMobileStats(); window.addEventListener("resize",handleMobileStats);
+
+/* ══ EXP CONNECTOR ══ */
+const connector=document.getElementById("exp-connector");
+if(connector){
+  const connIo=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{if(e.isIntersecting){connector.classList.add("animate");connIo.unobserve(connector);}});
+  },{threshold:0.5}); connIo.observe(connector);
+}
+
+/* ══ SMOOTH SCROLL ══ */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener("click",function(e){
+    const t=document.querySelector(this.getAttribute("href"));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:"smooth"});}
+  });
+});
+
+/* ══ CONTACT FORM ══ */
+const submitBtn = document.getElementById("form-submit-btn");
+const formSuccess = document.getElementById("form-success");
+
+submitBtn.addEventListener("click", () => {
+  const name = document.getElementById("contact-name").value.trim();
+  const email = document.getElementById("contact-email").value.trim();
+  const message = document.getElementById("contact-message").value.trim();
+
+  // Basic validation
+  if (!name || !email || !message) {
+    // Shake empty fields
+    [["contact-name",name],["contact-email",email],["contact-message",message]].forEach(([id,val])=>{
+      if(!val){
+        const el=document.getElementById(id);
+        el.style.borderColor="rgba(220,38,38,0.6)";
+        el.style.animation="shake 0.4s ease";
+        setTimeout(()=>{el.style.borderColor="";el.style.animation="";},800);
+      }
+    });
+    return;
   }
+
+  // Simulate send (mailto fallback)
+  const subject = encodeURIComponent(`Portfolio contact from ${name}`);
+  const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`);
+  window.location.href = `mailto:nikhilvishwan91@gmail.com?subject=${subject}&body=${body}`;
+
+  // Show success
+  submitBtn.style.display="none";
+  formSuccess.classList.add("show");
+  spawnConfetti(submitBtn);
+});
+
+/* shake keyframe */
+const style=document.createElement("style");
+style.textContent=`@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}`;
+document.head.appendChild(style);
+
+/* ══ STAGGERED SKILL TAG ENTRANCE ══ */
+document.querySelectorAll(".stag-dark,.stag").forEach((el,i)=>{
+  el.style.opacity="0"; el.style.transform="translateY(14px) scale(0.9)";
+  el.style.transition=`opacity 0.5s ease ${i*0.05}s,transform 0.5s cubic-bezier(0.34,1.56,0.64,1) ${i*0.05}s`;
+});
+const tagObserver=new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.querySelectorAll(".stag-dark,.stag").forEach(tag=>{
+        tag.style.opacity="1"; tag.style.transform="translateY(0) scale(1)";
+      }); tagObserver.unobserve(entry.target);
+    }
+  });
+},{threshold:0.2});
+document.querySelectorAll(".flex.flex-wrap").forEach(wrap=>tagObserver.observe(wrap));
 </script>
 </body>
 </html>
