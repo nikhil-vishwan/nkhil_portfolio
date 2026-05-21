@@ -30,11 +30,11 @@ const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 const saved = localStorage.getItem("nv-theme");
 const initTheme = saved || (prefersDark ? "dark" : "light");
 html.setAttribute("data-theme", initTheme);
-themeIcon.textContent = initTheme === "dark" ? "☀︎" : "⏾";
+themeIcon.textContent = initTheme === "dark" ? "☀︎" : "☾";
 themeBtn.addEventListener("click", () => {
   const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
   html.setAttribute("data-theme", next);
-  themeIcon.textContent = next === "dark" ? "☀︎" : "⏾";
+  themeIcon.textContent = next === "dark" ? "☀︎" : "☾";
   localStorage.setItem("nv-theme", next);
 });
 
